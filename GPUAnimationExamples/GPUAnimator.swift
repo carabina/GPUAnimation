@@ -33,11 +33,13 @@ public typealias GPUAnimationSetter = (inout vector_float4) -> Void
 internal class GPUAnimationEntry:Hashable{
   var getter:GPUAnimationGetter
   var setter:GPUAnimationSetter
+  var completion:(()->Void)?
   var hashValue:Int
-  init(hashValue: Int, getter:@escaping GPUAnimationGetter, setter:@escaping GPUAnimationSetter){
+  init(hashValue: Int, getter:@escaping GPUAnimationGetter, setter:@escaping GPUAnimationSetter, completion:(()->Void)? = nil){
     self.hashValue = hashValue
     self.getter = getter
     self.setter = setter
+    self.completion = completion
   }
 }
 internal func ==(lhs: GPUAnimationEntry, rhs: GPUAnimationEntry) -> Bool {
@@ -81,6 +83,7 @@ open class GPUSpringAnimator: NSObject {
       k.setter(&animationBuffer.content![i].frame)
       if (!animationBuffer.content![i].running) {
         animationBuffer.remove(key: k)
+        k.completion?()
       }
     }
   }
@@ -109,8 +112,9 @@ open class GPUSpringAnimator: NSObject {
                     target:vector_float4,
                     stiffness:Float = 150,
                     damping:Float = 10,
-                    threshold:Float = 0.001) {
-    let entry = GPUAnimationEntry(hashValue: item.hashValue + key.hashValue, getter:getter, setter:setter)
+                    threshold:Float = 0.001,
+                    completion:(() -> Void)? = nil) {
+    let entry = GPUAnimationEntry(hashValue: item.hashValue + key.hashValue, getter:getter, setter:setter, completion:completion)
     animationBuffer.add(key: entry, value: GPUAnimationState(current: getter(), target: target, stiffness: stiffness, damping: damping, threshold: threshold))
     if displayLinkPaused{
       displayLinkPaused = false

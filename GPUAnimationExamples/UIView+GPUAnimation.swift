@@ -9,7 +9,40 @@
 import UIKit
 
 
+var associationKey = "UIView+GPUAnimation"
+
+public class GPUAnimationBuilder{
+  var view:UIView
+  init(view:UIView) {
+    self.view = view
+  }
+  func wait(_ time:Float){
+    view.animate.moveTo(x: 100, y: 200).rotate(5)
+  }
+  func rotate(_ z:Float, x:Float = 0, y:Float = 0){
+    
+  }
+  func moveTo(x:Float, y:Float) -> Self{
+    return self
+  }
+  func sizeTo(width:Float, height:Float){
+    
+  }
+}
+
 extension UIView{
+  
+  public var animate: GPUAnimationBuilder {
+    get {
+      if let instance = objc_getAssociatedObject(self, &associationKey) as? GPUAnimationBuilder {
+        return instance
+      }
+      let instance = GPUAnimationBuilder(view: self)
+      objc_setAssociatedObject(self, &associationKey, instance, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      return instance
+    }
+  }
+  
   func animateTo(frame:CGRect,
                   stiffness:Float = 150,
                   damping:Float = 10,
@@ -34,8 +67,8 @@ extension UIView{
                                              key: "bounds",
                                              getter: self.bounds.toVec4,
                                              setter: { [unowned self] nv in
-                                              self.bounds.fromVec4(nv)
-      },
+                                               self.bounds.fromVec4(nv)
+                                             },
                                              target: bounds.toVec4,
                                              stiffness: stiffness,
                                              damping: damping,
