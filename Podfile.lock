@@ -1,0 +1,24 @@
+PODS:
+  - MotionAnimation (0.1.1)
+  - pop (1.0.9)
+
+DEPENDENCIES:
+  - MotionAnimation (from `https://github.com/lkzhao/MotionAnimation.git`, branch
+    `swift3`)
+  - pop (~> 1.0)
+
+EXTERNAL SOURCES:
+  MotionAnimation:
+    :branch: swift3
+    :git: https://github.com/lkzhao/MotionAnimation.git
+
+CHECKOUT OPTIONS:
+  MotionAnimation:
+    :commit: dd81eab887d43917602b2c58f4801a7c45519777
+    :git: https://github.com/lkzhao/MotionAnimation.git
+
+SPEC CHECKSUMS:
+  MotionAnimation: ff356cfdbedcab52a5bfc94cc96ed44ea2f652e0
+  pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
+
+COCOAPODS: 0.39.0

@@ -1,0 +1,6 @@
+framework module Pods_GPUAnimationExamples {
+  umbrella header "Pods-GPUAnimationExamples-umbrella.h"
+
+  export *
+  module * { export * }
+}
