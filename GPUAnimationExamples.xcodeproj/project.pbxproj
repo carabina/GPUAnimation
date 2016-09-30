@@ -21,6 +21,7 @@
 		B11022261D9CEDC400EDF9D0 /* UIView+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B110221D1D9CEDC400EDF9D0 /* UIView+GPUAnimation.swift */; };
 		B11022271D9CEDC400EDF9D0 /* GPUWorkerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B110221E1D9CEDC400EDF9D0 /* GPUWorkerTest.swift */; };
 		B11022281D9CEDC400EDF9D0 /* GPUWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B110221F1D9CEDC400EDF9D0 /* GPUWorker.swift */; };
+		B1AF47471D9DF9E50053A995 /* ExamplesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AF47461D9DF9E50053A995 /* ExamplesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		B110221D1D9CEDC400EDF9D0 /* UIView+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+GPUAnimation.swift"; sourceTree = "<group>"; };
 		B110221E1D9CEDC400EDF9D0 /* GPUWorkerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUWorkerTest.swift; sourceTree = "<group>"; };
 		B110221F1D9CEDC400EDF9D0 /* GPUWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUWorker.swift; sourceTree = "<group>"; };
+		B1AF47461D9DF9E50053A995 /* ExamplesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExamplesViewController.swift; sourceTree = "<group>"; };
 		C4B7DA9E026EC75C5D7A6CA0 /* Pods-GPUAnimationExamples.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPUAnimationExamples.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GPUAnimationExamples/Pods-GPUAnimationExamples.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +98,7 @@
 			children = (
 				B11022051D9CED3200EDF9D0 /* AppDelegate.swift */,
 				B11022171D9CEDC400EDF9D0 /* ViewController.swift */,
+				B1AF47461D9DF9E50053A995 /* ExamplesViewController.swift */,
 				B11022291D9CEDCF00EDF9D0 /* GPUAnimation */,
 				B11022091D9CED3200EDF9D0 /* Main.storyboard */,
 				B110220C1D9CED3200EDF9D0 /* Assets.xcassets */,
@@ -252,6 +255,7 @@
 				B11022231D9CEDC400EDF9D0 /* GPUAnimator.swift in Sources */,
 				B11022261D9CEDC400EDF9D0 /* UIView+GPUAnimation.swift in Sources */,
 				B11022061D9CED3200EDF9D0 /* AppDelegate.swift in Sources */,
+				B1AF47471D9DF9E50053A995 /* ExamplesViewController.swift in Sources */,
 				B11022211D9CEDC400EDF9D0 /* Random.swift in Sources */,
 				B11022241D9CEDC400EDF9D0 /* SortedRangeSet.swift in Sources */,
 			);

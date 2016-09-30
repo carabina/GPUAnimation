@@ -17,7 +17,6 @@ private class Shared {
 
 internal protocol GPUBufferType {
   var buffer: MTLBuffer? { get }
-  var locked: Bool { get set }
 }
 
 open class GPUBuffer<Key:Hashable, Value>:Sequence, GPUBufferType {
@@ -25,15 +24,11 @@ open class GPUBuffer<Key:Hashable, Value>:Sequence, GPUBufferType {
   public func makeIterator() -> DictionaryIterator<Key, Int> {
     return managed.makeIterator()
   }
-  
-  public var managed:[Key:Int] = [:]
-  
   public var content: UnsafeMutableBufferPointer<Value>? = nil
   
   internal var buffer: MTLBuffer? = nil
   internal var freeIndexes:[Int] = []
-  internal var toBeSet:[Key:Value] = [:]
-  internal var toBeRemoved = Set<Key>()
+  private var managed:[Key:Int] = [:]
   
   public var capacity:Int{
     return content?.count ?? 0
@@ -43,54 +38,22 @@ open class GPUBuffer<Key:Hashable, Value>:Sequence, GPUBufferType {
     return managed.count
   }
   
-  internal var locked:Bool = false{
-    didSet{
-      if locked{
-        // GPU will start processing this buffer. process all queued objects
-        for k in toBeRemoved{
-          unset(k)
-        }
-        
-        for (k, v) in toBeSet{
-          set(k, to: v)
-        }
-      }
-    }
-  }
-  
   public init(_ size:Int = 2){
     resize(size:size)
   }
   
+  public func indexOf(key:Key) -> Int? {
+    return managed[key]
+  }
+
   public func remove(key:Key){
-    if locked {
-      toBeSet[key] = nil
-      toBeRemoved.insert(key)
-    } else {
-      unset(key)
-    }
-  }
-  
-  public func add(key:Key, value:Value){
-    if locked {
-      toBeSet[key] = value
-      toBeRemoved.remove(key)
-    } else {
-      set(key, to: value)
-    }
-  }
-  
-  private func unset(_ key:Key){
-    toBeRemoved.remove(key)
     if let i = managed[key] {
-      toBeSet.removeValue(forKey: key)
       managed.removeValue(forKey: key)
       freeIndexes.append(i)
     }
   }
   
-  private func set(_ key:Key, to value:Value){
-    toBeSet.removeValue(forKey: key)
+  public func add(key:Key, value:Value){
     if let i = managed[key] {
       content![i] = value
     } else {
@@ -135,7 +98,6 @@ open class GPUWorker {
   var threadExecutionWidth:Int = 32
   
   public init(functionName:String) throws {
-    print(Shared.device.maxThreadsPerThreadgroup)
     if Shared.device == nil {
       throw GPUWorkerError.MetalNotAvaliable
     }
@@ -160,7 +122,6 @@ open class GPUWorker {
     let computeCE = commandBuffer.makeComputeCommandEncoder()
     computeCE.setComputePipelineState(computePS)
     for (i, buffer) in buffers.enumerated() {
-      buffers[i].locked = true
       computeCE.setBuffer(buffer.buffer, offset: 0, at: i)
     }
     
@@ -174,9 +135,6 @@ open class GPUWorker {
   
   func doneProcessing(){
     processing = false
-    for (i, _) in buffers.enumerated() {
-      buffers[i].locked = false
-    }
     completionCallback?()
   }
 }

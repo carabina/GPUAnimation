@@ -17,9 +17,9 @@ internal struct GPUAnimationState{
   var threshold: Float
   var stiffness: Float
   var damping: Float
-  var running: Bool = true
+  var running: Int32 = 1
 
-  init(current c:vector_float4, target t: vector_float4, stiffness s:Float = 150, damping d:Float = 10, threshold th:Float = 0.001) {
+  init(current c:vector_float4, target t: vector_float4, stiffness s:Float = 150, damping d:Float = 10, threshold th:Float = 0.01) {
     frame = c
     target = t
     threshold = th
@@ -31,8 +31,8 @@ internal struct GPUAnimationState{
 public typealias GPUAnimationGetter = () -> vector_float4
 public typealias GPUAnimationSetter = (inout vector_float4) -> Void
 internal class GPUAnimationEntry:Hashable{
-  var getter:GPUAnimationGetter
-  var setter:GPUAnimationSetter
+  var getter:GPUAnimationGetter!
+  var setter:GPUAnimationSetter!
   var completion:(()->Void)?
   var hashValue:Int
   init(hashValue: Int, getter:@escaping GPUAnimationGetter, setter:@escaping GPUAnimationSetter, completion:(()->Void)? = nil){
@@ -40,6 +40,9 @@ internal class GPUAnimationEntry:Hashable{
     self.getter = getter
     self.setter = setter
     self.completion = completion
+  }
+  init(hashValue: Int){
+    self.hashValue = hashValue
   }
 }
 internal func ==(lhs: GPUAnimationEntry, rhs: GPUAnimationEntry) -> Bool {
@@ -62,6 +65,7 @@ open class GPUSpringAnimator: NSObject {
   var worker:GPUWorker!
   var animationBuffer = GPUBuffer<GPUAnimationEntry, GPUAnimationState>()
   var paramBuffer = GPUBuffer<String, Float>(1)
+  var queuedCommands = [()->()]()
   
   override init(){
     super.init()
@@ -81,16 +85,20 @@ open class GPUSpringAnimator: NSObject {
   func doneProcessing(){
     for (k, i) in animationBuffer {
       k.setter(&animationBuffer.content![i].frame)
-      if (!animationBuffer.content![i].running) {
+//      print("Done \(i) at \(animationBuffer.content![i])")
+      if (animationBuffer.content![i].running == 0) {
         animationBuffer.remove(key: k)
         k.completion?()
       }
+    }
+    for fn in queuedCommands{
+      fn()
     }
   }
   
   func update() {
     dt += Float(displayLink.duration)
-    if ( worker.processing ) { return }
+    if worker.processing { return }
     
     if animationBuffer.count == 0{
       displayLinkPaused = true
@@ -105,6 +113,17 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
+  open func remove<T:Hashable>(_ item:T, key:String){
+    let removeFn = {
+      self.animationBuffer.remove(key: GPUAnimationEntry(hashValue: item.hashValue + key.hashValue))
+    }
+    if worker.processing {
+      queuedCommands.append(removeFn)
+    } else {
+      removeFn()
+    }
+  }
+  
   open func animate<T:Hashable>(_ item:T,
                     key:String,
                     getter:@autoclosure @escaping () -> vector_float4,
@@ -112,12 +131,21 @@ open class GPUSpringAnimator: NSObject {
                     target:vector_float4,
                     stiffness:Float = 150,
                     damping:Float = 10,
-                    threshold:Float = 0.001,
+                    threshold:Float = 0.01,
                     completion:(() -> Void)? = nil) {
     let entry = GPUAnimationEntry(hashValue: item.hashValue + key.hashValue, getter:getter, setter:setter, completion:completion)
-    animationBuffer.add(key: entry, value: GPUAnimationState(current: getter(), target: target, stiffness: stiffness, damping: damping, threshold: threshold))
-    if displayLinkPaused{
-      displayLinkPaused = false
+    let state = GPUAnimationState(current: getter(), target: target, stiffness: stiffness, damping: damping, threshold: threshold)
+    let insertFn = {
+//      print("Animate \(key)  \(getter())->\(target)  damping:\(damping)  stiffness:\(stiffness)  threshold:\(threshold)")
+      self.animationBuffer.add(key: entry, value: state)
+      if self.displayLinkPaused {
+        self.displayLinkPaused = false
+      }
+    }
+    if worker.processing {
+      queuedCommands.append(insertFn)
+    } else {
+      insertFn()
     }
   }
   

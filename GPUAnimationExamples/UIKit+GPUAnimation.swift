@@ -14,6 +14,11 @@ public protocol GPUAnimatable{
   mutating func fromVec4(_:vector_float4)
 }
 
+public protocol GPUAnimatableObject{
+  var toVec4:vector_float4 { get }
+  static func fromVec4(_ values: vector_float4) -> Self
+}
+
 extension CGRect:GPUAnimatable{
   public var toVec4:vector_float4 {
     return [Float(origin.x), Float(origin.y), Float(width), Float(height)]
@@ -44,3 +49,17 @@ extension CGSize:GPUAnimatable{
   }
 }
 
+
+extension UIColor:GPUAnimatableObject{
+  public var toVec4:vector_float4 {
+    var r : CGFloat = 0
+    var g : CGFloat = 0
+    var b : CGFloat = 0
+    var a : CGFloat = 0
+    self.getRed(&r, green: &g, blue: &b, alpha: &a)
+    return [Float(r),Float(g),Float(b),Float(a)]
+  }
+  public static func fromVec4(_ values: vector_float4) -> Self {
+    return self.init(red: CGFloat(values[0]), green: CGFloat(values[1]), blue: CGFloat(values[2]), alpha: CGFloat(values[3]))
+  }
+}

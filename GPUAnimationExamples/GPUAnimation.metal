@@ -9,7 +9,7 @@ struct Animation {
   float threshold;
   float stiffness;
   float damping;
-  bool running;
+  int running;
 };
 
 kernel void compute_main(
