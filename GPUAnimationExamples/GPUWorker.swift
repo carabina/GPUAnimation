@@ -19,7 +19,7 @@ internal protocol GPUBufferType {
   var buffer: MTLBuffer? { get }
 }
 
-open class GPUBuffer<Key:Hashable, Value>:Sequence, GPUBufferType {
+open class GPUBuffer<Key:Hashable, Value, MetaData>:Sequence, GPUBufferType {
 
   public func makeIterator() -> DictionaryIterator<Key, Int> {
     return managed.makeIterator()
@@ -29,6 +29,7 @@ open class GPUBuffer<Key:Hashable, Value>:Sequence, GPUBufferType {
   internal var buffer: MTLBuffer? = nil
   internal var freeIndexes:[Int] = []
   private var managed:[Key:Int] = [:]
+  private var metaData:[Key:MetaData] = [:]
   
   public var capacity:Int{
     return content?.count ?? 0
@@ -48,13 +49,15 @@ open class GPUBuffer<Key:Hashable, Value>:Sequence, GPUBufferType {
 
   public func remove(key:Key){
     if let i = managed[key] {
-      managed.removeValue(forKey: key)
+      managed[key] = nil
+      metaData[key] = nil
       freeIndexes.append(i)
     }
   }
   
-  public func add(key:Key, value:Value){
+  public func add(key:Key, value:Value, meta:MetaData? = nil){
     if let i = managed[key] {
+      metaData[key] = meta
       content![i] = value
     } else {
       if freeIndexes.count == 0 {
@@ -62,8 +65,13 @@ open class GPUBuffer<Key:Hashable, Value>:Sequence, GPUBufferType {
       }
       let i = freeIndexes.popLast()!
       managed[key] = i
+      metaData[key] = meta
       content![i] = value
     }
+  }
+  
+  public func metaDataFor(key:Key) -> MetaData?{
+    return metaData[key]
   }
 
   public func resize(size:Int){
@@ -110,14 +118,11 @@ open class GPUWorker {
     threadExecutionWidth = computePS.threadExecutionWidth
   }
   
-  func addBuffer<K: Hashable,V>(buffer:GPUBuffer<K,V>){
+  func addBuffer<K: Hashable,V,M>(buffer:GPUBuffer<K,V,M>){
     buffers.append(buffer)
   }
   
-  var processing = false
   func process(size:Int){
-    guard processing == false else { return }
-    processing = true
     let commandBuffer = Shared.queue.makeCommandBuffer()
     let computeCE = commandBuffer.makeComputeCommandEncoder()
     computeCE.setComputePipelineState(computePS)
@@ -127,14 +132,13 @@ open class GPUWorker {
     
     computeCE.dispatchThreadgroups(MTLSize(width: (size+threadExecutionWidth-1)/threadExecutionWidth, height: 1, depth: 1), threadsPerThreadgroup: MTLSize(width: threadExecutionWidth, height: 1, depth: 1))
     computeCE.endEncoding()
-    commandBuffer.addCompletedHandler { (_) in
-      DispatchQueue.main.async(execute:self.doneProcessing)
-    }
+    commandBuffer.addCompletedHandler(self.doneProcessing)
     commandBuffer.commit()
   }
   
-  func doneProcessing(){
-    processing = false
-    completionCallback?()
+  func doneProcessing(buffer:MTLCommandBuffer){
+    DispatchQueue.main.async {
+      self.completionCallback?()
+    }
   }
 }

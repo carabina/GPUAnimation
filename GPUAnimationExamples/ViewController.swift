@@ -134,6 +134,7 @@ class ViewController: UIViewController {
                                  width: CGFloat.random(lower: 100, 200),
                                  height: CGFloat.random(lower: 100, 200))
             }
+//            self.animator.animate(k, key: "center", getter: { return k.center.toVec4 }, setter: { nv in k.center.fromVec4(nv) }, target: CGPoint(x: CGFloat.random(lower: 50, width-50), y: CGFloat.random(lower: 50, height-50)).toVec4)
           }
         }
       }
@@ -143,6 +144,11 @@ class ViewController: UIViewController {
   func tap(_ gr:UITapGestureRecognizer){
 //    let loc = gr.location(in: view)
     stopGenerating = !stopGenerating
+    
+    #if DEBUGMEMORY
+      print(GPUAnimationBuilder.inited)
+      print(GPUAnimationBuilderContainer.inited)
+    #endif
   }
 }
 

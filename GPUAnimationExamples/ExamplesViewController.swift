@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ExamplesViewController: UIViewController {
   
   var square = UIView(frame:CGRect(x: 0, y: 0, width: 200, height: 200))
@@ -17,6 +18,23 @@ class ExamplesViewController: UIViewController {
     view.addSubview(square)
     square.backgroundColor = UIColor.blue
     test1()
+//    testAlloc()
+  }
+  
+  func testAlloc(){
+    for _ in 0...10000{
+      square.animate { to in
+        to.stiffness = 200
+        to.bounds = CGRect(x: 0, y: 0, width: 300, height: 300)
+      }.animate{ to in
+        to.stiffness = 300
+        to.center = CGPoint(x:200, y:400)
+      }
+    }
+    #if DEBUGMEMORY
+//      print(GPUAnimationMetaData.inited)
+      print(GPUAnimationBuilderContainer.inited)
+    #endif
   }
   
   func test1(){
@@ -51,7 +69,9 @@ class ExamplesViewController: UIViewController {
     let animation = square.animate{
       $0.stiffness = 20
       $0.bounds = CGRect(x: 0, y: 0, width: 50, height: 50)
-    }.then{ print("This line shouldn't be printed") }.execute()
+    }.then{
+      print("This line shouldn't be printed")
+    }.execute()
     Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false){ timer in
       animation.stop()
       print("test 2 finished!")
