@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		5C54320138A72EEF8B56F5D8 /* Pods_GPUAnimationExamples.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D8CC06182906AC3D28B60E0 /* Pods_GPUAnimationExamples.framework */; };
-		A3E7785E1D9F5DD80096C5C2 /* GPUAnimation.metal in Sources */ = {isa = PBXBuildFile; fileRef = A3E778581D9F5DD80096C5C2 /* GPUAnimation.metal */; };
-		A3E7785F1D9F5DD80096C5C2 /* GPUAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778591D9F5DD80096C5C2 /* GPUAnimator.swift */; };
-		A3E778601D9F5DD80096C5C2 /* GPUWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E7785A1D9F5DD80096C5C2 /* GPUWorker.swift */; };
-		A3E778611D9F5DD80096C5C2 /* GPUWorkerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E7785B1D9F5DD80096C5C2 /* GPUWorkerTest.swift */; };
-		A3E778621D9F5DD80096C5C2 /* UIKit+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E7785C1D9F5DD80096C5C2 /* UIKit+GPUAnimation.swift */; };
-		A3E778631D9F5DD80096C5C2 /* UIView+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E7785D1D9F5DD80096C5C2 /* UIView+GPUAnimation.swift */; };
+		A3E7786B1D9F604C0096C5C2 /* GPUAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778651D9F604C0096C5C2 /* GPUAnimator.swift */; };
+		A3E7786C1D9F604C0096C5C2 /* GPUWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778661D9F604C0096C5C2 /* GPUWorker.swift */; };
+		A3E7786D1D9F604C0096C5C2 /* GPUWorkerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778671D9F604C0096C5C2 /* GPUWorkerTest.swift */; };
+		A3E7786E1D9F604C0096C5C2 /* UIKit+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778681D9F604C0096C5C2 /* UIKit+GPUAnimation.swift */; };
+		A3E7786F1D9F604C0096C5C2 /* UIView+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778691D9F604C0096C5C2 /* UIView+GPUAnimation.swift */; };
+		A3E778751D9F62ED0096C5C2 /* GPUAnimation.metal in Sources */ = {isa = PBXBuildFile; fileRef = A3E778741D9F62ED0096C5C2 /* GPUAnimation.metal */; };
 		B11022061D9CED3200EDF9D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11022051D9CED3200EDF9D0 /* AppDelegate.swift */; };
 		B110220B1D9CED3200EDF9D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B11022091D9CED3200EDF9D0 /* Main.storyboard */; };
 		B110220D1D9CED3200EDF9D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B110220C1D9CED3200EDF9D0 /* Assets.xcassets */; };
@@ -24,15 +24,27 @@
 		B1AF47471D9DF9E50053A995 /* ExamplesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AF47461D9DF9E50053A995 /* ExamplesViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A3E778791D9F632D0096C5C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B11021FA1D9CED3200EDF9D0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3E778711D9F62ED0096C5C2;
+			remoteInfo = GPUAnimation;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		6F143AAF1BFC8C47E78FA977 /* Pods-GPUAnimationExamples.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPUAnimationExamples.release.xcconfig"; path = "Pods/Target Support Files/Pods-GPUAnimationExamples/Pods-GPUAnimationExamples.release.xcconfig"; sourceTree = "<group>"; };
 		9D8CC06182906AC3D28B60E0 /* Pods_GPUAnimationExamples.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GPUAnimationExamples.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A3E778581D9F5DD80096C5C2 /* GPUAnimation.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = GPUAnimation.metal; sourceTree = "<group>"; };
-		A3E778591D9F5DD80096C5C2 /* GPUAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUAnimator.swift; sourceTree = "<group>"; };
-		A3E7785A1D9F5DD80096C5C2 /* GPUWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUWorker.swift; sourceTree = "<group>"; };
-		A3E7785B1D9F5DD80096C5C2 /* GPUWorkerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUWorkerTest.swift; sourceTree = "<group>"; };
-		A3E7785C1D9F5DD80096C5C2 /* UIKit+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+GPUAnimation.swift"; sourceTree = "<group>"; };
-		A3E7785D1D9F5DD80096C5C2 /* UIView+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+GPUAnimation.swift"; sourceTree = "<group>"; };
+		A3E778641D9F604C0096C5C2 /* GPUAnimation.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = GPUAnimation.metal; path = GPUAnimation/GPUAnimation.metal; sourceTree = SOURCE_ROOT; };
+		A3E778651D9F604C0096C5C2 /* GPUAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPUAnimator.swift; path = GPUAnimation/GPUAnimator.swift; sourceTree = SOURCE_ROOT; };
+		A3E778661D9F604C0096C5C2 /* GPUWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPUWorker.swift; path = GPUAnimation/GPUWorker.swift; sourceTree = SOURCE_ROOT; };
+		A3E778671D9F604C0096C5C2 /* GPUWorkerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPUWorkerTest.swift; path = GPUAnimation/GPUWorkerTest.swift; sourceTree = SOURCE_ROOT; };
+		A3E778681D9F604C0096C5C2 /* UIKit+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIKit+GPUAnimation.swift"; path = "GPUAnimation/UIKit+GPUAnimation.swift"; sourceTree = SOURCE_ROOT; };
+		A3E778691D9F604C0096C5C2 /* UIView+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+GPUAnimation.swift"; path = "GPUAnimation/UIView+GPUAnimation.swift"; sourceTree = SOURCE_ROOT; };
+		A3E778721D9F62ED0096C5C2 /* GPUAnimation.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = GPUAnimation.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3E778741D9F62ED0096C5C2 /* GPUAnimation.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = GPUAnimation.metal; sourceTree = "<group>"; };
 		B11022021D9CED3200EDF9D0 /* GPUAnimationExamples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPUAnimationExamples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B11022051D9CED3200EDF9D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B110220A1D9CED3200EDF9D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -75,10 +87,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A3E778731D9F62ED0096C5C2 /* GPUAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				A3E778741D9F62ED0096C5C2 /* GPUAnimation.metal */,
+			);
+			path = GPUAnimation;
+			sourceTree = "<group>";
+		};
 		B11021F91D9CED3200EDF9D0 = {
 			isa = PBXGroup;
 			children = (
 				B11022041D9CED3200EDF9D0 /* GPUAnimationExamples */,
+				A3E778731D9F62ED0096C5C2 /* GPUAnimation */,
 				B11022031D9CED3200EDF9D0 /* Products */,
 				1D8F3AF9347CA7F54786C097 /* Pods */,
 				947D032E0E9ECD6B1D7A4000 /* Frameworks */,
@@ -89,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				B11022021D9CED3200EDF9D0 /* GPUAnimationExamples.app */,
+				A3E778721D9F62ED0096C5C2 /* GPUAnimation.metallib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -111,12 +133,12 @@
 		B11022291D9CEDCF00EDF9D0 /* GPUAnimation */ = {
 			isa = PBXGroup;
 			children = (
-				A3E778581D9F5DD80096C5C2 /* GPUAnimation.metal */,
-				A3E778591D9F5DD80096C5C2 /* GPUAnimator.swift */,
-				A3E7785A1D9F5DD80096C5C2 /* GPUWorker.swift */,
-				A3E7785B1D9F5DD80096C5C2 /* GPUWorkerTest.swift */,
-				A3E7785C1D9F5DD80096C5C2 /* UIKit+GPUAnimation.swift */,
-				A3E7785D1D9F5DD80096C5C2 /* UIView+GPUAnimation.swift */,
+				A3E778641D9F604C0096C5C2 /* GPUAnimation.metal */,
+				A3E778651D9F604C0096C5C2 /* GPUAnimator.swift */,
+				A3E778661D9F604C0096C5C2 /* GPUWorker.swift */,
+				A3E778671D9F604C0096C5C2 /* GPUWorkerTest.swift */,
+				A3E778681D9F604C0096C5C2 /* UIKit+GPUAnimation.swift */,
+				A3E778691D9F604C0096C5C2 /* UIView+GPUAnimation.swift */,
 				B11022181D9CEDC400EDF9D0 /* Random.swift */,
 				B110221B1D9CEDC400EDF9D0 /* SortedRangeSet.swift */,
 			);
@@ -126,6 +148,21 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A3E778711D9F62ED0096C5C2 /* GPUAnimation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3E778781D9F62ED0096C5C2 /* Build configuration list for PBXNativeTarget "GPUAnimation" */;
+			buildPhases = (
+				A3E778701D9F62ED0096C5C2 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GPUAnimation;
+			productName = GPUAnimation;
+			productReference = A3E778721D9F62ED0096C5C2 /* GPUAnimation.metallib */;
+			productType = "com.apple.product-type.metal-library";
+		};
 		B11022011D9CED3200EDF9D0 /* GPUAnimationExamples */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B11022141D9CED3200EDF9D0 /* Build configuration list for PBXNativeTarget "GPUAnimationExamples" */;
@@ -140,6 +177,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A3E7787A1D9F632D0096C5C2 /* PBXTargetDependency */,
 			);
 			name = GPUAnimationExamples;
 			productName = GPUAnimationExamples;
@@ -156,9 +194,14 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = lkzhao;
 				TargetAttributes = {
+					A3E778711D9F62ED0096C5C2 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
 					B11022011D9CED3200EDF9D0 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 4VSEW78TKT;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -177,6 +220,7 @@
 			projectRoot = "";
 			targets = (
 				B11022011D9CED3200EDF9D0 /* GPUAnimationExamples */,
+				A3E778711D9F62ED0096C5C2 /* GPUAnimation */,
 			);
 		};
 /* End PBXProject section */
@@ -243,25 +287,40 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A3E778701D9F62ED0096C5C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3E778751D9F62ED0096C5C2 /* GPUAnimation.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B11021FE1D9CED3200EDF9D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3E778601D9F5DD80096C5C2 /* GPUWorker.swift in Sources */,
+				A3E7786C1D9F604C0096C5C2 /* GPUWorker.swift in Sources */,
 				B11022201D9CEDC400EDF9D0 /* ViewController.swift in Sources */,
 				B11022061D9CED3200EDF9D0 /* AppDelegate.swift in Sources */,
-				A3E778611D9F5DD80096C5C2 /* GPUWorkerTest.swift in Sources */,
-				A3E7785F1D9F5DD80096C5C2 /* GPUAnimator.swift in Sources */,
+				A3E7786D1D9F604C0096C5C2 /* GPUWorkerTest.swift in Sources */,
+				A3E7786B1D9F604C0096C5C2 /* GPUAnimator.swift in Sources */,
 				B1AF47471D9DF9E50053A995 /* ExamplesViewController.swift in Sources */,
-				A3E778631D9F5DD80096C5C2 /* UIView+GPUAnimation.swift in Sources */,
+				A3E7786F1D9F604C0096C5C2 /* UIView+GPUAnimation.swift in Sources */,
 				B11022211D9CEDC400EDF9D0 /* Random.swift in Sources */,
 				B11022241D9CEDC400EDF9D0 /* SortedRangeSet.swift in Sources */,
-				A3E778621D9F5DD80096C5C2 /* UIKit+GPUAnimation.swift in Sources */,
-				A3E7785E1D9F5DD80096C5C2 /* GPUAnimation.metal in Sources */,
+				A3E7786E1D9F604C0096C5C2 /* UIKit+GPUAnimation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A3E7787A1D9F632D0096C5C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3E778711D9F62ED0096C5C2 /* GPUAnimation */;
+			targetProxy = A3E778791D9F632D0096C5C2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		B11022091D9CED3200EDF9D0 /* Main.storyboard */ = {
@@ -283,6 +342,20 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		A3E778761D9F62ED0096C5C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A3E778771D9F62ED0096C5C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		B11022121D9CED3200EDF9D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -329,6 +402,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -371,6 +445,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -408,6 +483,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A3E778781D9F62ED0096C5C2 /* Build configuration list for PBXNativeTarget "GPUAnimation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3E778761D9F62ED0096C5C2 /* Debug */,
+				A3E778771D9F62ED0096C5C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		B11021FD1D9CED3200EDF9D0 /* Build configuration list for PBXProject "GPUAnimationExamples" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

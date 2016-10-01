@@ -39,7 +39,7 @@ class ViewController: UIViewController {
 //    countLabel.text = "Hello World"
 //    animator.animate(view: countLabel, to: CGRect(x: 300, y: 30, width: 200, height: 40))
     
-    let library = AnimationLibrary.POP
+    let library = AnimationLibrary.GPU
     
     timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
       self.step += 1

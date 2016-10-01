@@ -15,7 +15,7 @@ private class Shared {
   static var library: MTLLibrary! = device.newDefaultLibrary()
 }
 
-internal protocol GPUBufferType {
+open protocol GPUBufferType {
   var buffer: MTLBuffer? { get }
 }
 
@@ -26,8 +26,8 @@ open class GPUBuffer<Key:Hashable, Value, MetaData>:Sequence, GPUBufferType {
   }
   public var content: UnsafeMutableBufferPointer<Value>? = nil
   
-  internal var buffer: MTLBuffer? = nil
-  internal var freeIndexes:[Int] = []
+  public var buffer: MTLBuffer? = nil
+  private var freeIndexes:[Int] = []
   private var managed:[Key:Int] = [:]
   private var metaData:[Key:MetaData] = [:]
   
@@ -102,8 +102,8 @@ open class GPUWorker {
   let computeFn: MTLFunction
   let computePS: MTLComputePipelineState
   var buffers:[GPUBufferType] = []
-  var completionCallback:(()->Void)?
   var threadExecutionWidth:Int = 32
+  public var completionCallback:(()->Void)?
   
   public init(functionName:String) throws {
     if Shared.device == nil {
@@ -118,11 +118,11 @@ open class GPUWorker {
     threadExecutionWidth = computePS.threadExecutionWidth
   }
   
-  func addBuffer<K: Hashable,V,M>(buffer:GPUBuffer<K,V,M>){
+  public func addBuffer<K: Hashable,V,M>(buffer:GPUBuffer<K,V,M>){
     buffers.append(buffer)
   }
   
-  func process(size:Int){
+  public func process(size:Int){
     let commandBuffer = Shared.queue.makeCommandBuffer()
     let computeCE = commandBuffer.makeComputeCommandEncoder()
     computeCE.setComputePipelineState(computePS)
@@ -136,7 +136,7 @@ open class GPUWorker {
     commandBuffer.commit()
   }
   
-  func doneProcessing(buffer:MTLCommandBuffer){
+  private func doneProcessing(buffer:MTLCommandBuffer){
     DispatchQueue.main.async {
       self.completionCallback?()
     }

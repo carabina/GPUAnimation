@@ -49,7 +49,6 @@ extension CGSize:GPUAnimatable{
   }
 }
 
-
 extension UIColor:GPUAnimatableObject{
   public var toVec4:vector_float4 {
     var r : CGFloat = 0

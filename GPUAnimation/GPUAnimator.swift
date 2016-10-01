@@ -11,7 +11,7 @@ import MetalKit
 
 
 
-internal struct GPUAnimationState{
+fileprivate struct GPUAnimationState{
   // do not change the order of these variables
   // this struct is shared in Metal shader
   var frame: vector_float4 = vector_float4()
@@ -34,7 +34,7 @@ internal struct GPUAnimationState{
 public typealias GPUAnimationGetter = () -> vector_float4
 public typealias GPUAnimationSetter = (inout vector_float4) -> Void
 
-internal struct GPUAnimationMetaData{
+fileprivate struct GPUAnimationMetaData{
   var getter:GPUAnimationGetter!
   var setter:GPUAnimationSetter!
   var completion:((Bool)->Void)?
@@ -42,22 +42,13 @@ internal struct GPUAnimationMetaData{
     self.getter = getter
     self.setter = setter
     self.completion = completion
-//#if DEBUGMEMORY
-//    type(of: self).inited += 1
-//#endif
   }
-//#if DEBUGMEMORY
-//  internal static var inited = 0
-//  deinit{
-//    type(of: self).inited -= 1
-//  }
-//#endif
 }
 
 open class GPUSpringAnimator: NSObject {
   open static let sharedInstance = GPUSpringAnimator()
   
-  open var displayLinkPaused:Bool{
+  private var displayLinkPaused:Bool{
     get{
       return displayLink == nil
     }
@@ -66,13 +57,15 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
-  var displayLink : CADisplayLink!
-  var worker:GPUWorker!
-  var animationBuffer = GPUBuffer<Int, GPUAnimationState, GPUAnimationMetaData>()
-  var paramBuffer = GPUBuffer<String, Float, Any>(1)
-  var queuedCommands = [()->()]()
+  private var displayLink : CADisplayLink!
+  private var worker:GPUWorker!
+  private var animationBuffer = GPUBuffer<Int, GPUAnimationState, GPUAnimationMetaData>()
+  private var paramBuffer = GPUBuffer<String, Float, Any>(1)
+  private var queuedCommands = [()->()]()
+  private var dt:Float = 0
+  private var processing = false
   
-  override init(){
+  private override init(){
     super.init()
     do {
       paramBuffer.content![0] = 0
@@ -85,14 +78,10 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
-  var dt:Float = 0
-  
-  var processing = false
-  func doneProcessing(){
+  private func doneProcessing(){
     for (k, i) in animationBuffer {
       let meta = animationBuffer.metaDataFor(key: k)!
       meta.setter(&animationBuffer.content![i].frame)
-//      print("Done \(i) at \(animationBuffer.content![i])")
       if (animationBuffer.content![i].running == 0) {
         animationBuffer.remove(key: k)
         meta.completion?(true)
@@ -105,7 +94,7 @@ open class GPUSpringAnimator: NSObject {
     processing = false
   }
   
-  func update() {
+  @objc private func update() {
     dt += Float(displayLink.duration)
     if processing { return }
     
@@ -149,7 +138,6 @@ open class GPUSpringAnimator: NSObject {
     let metaData = GPUAnimationMetaData(getter:getter, setter:setter, completion:completion)
     let state = GPUAnimationState(current: getter(), target: target, stiffness: stiffness, damping: damping, threshold: threshold)
     let insertFn = {
-      //      print("Animate \(key)  \(getter())->\(target)  damping:\(damping)  stiffness:\(stiffness)  threshold:\(threshold)")
       self.animationBuffer.metaDataFor(key: animationKey)?.completion?(false)
       self.animationBuffer.add(key: animationKey, value: state, meta:metaData)
       if self.displayLinkPaused {
@@ -163,7 +151,7 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
-  func start() {
+  private func start() {
     if !displayLinkPaused {
       return
     }
@@ -171,7 +159,7 @@ open class GPUSpringAnimator: NSObject {
     displayLink.add(to: RunLoop.main, forMode: RunLoopMode(rawValue: RunLoopMode.commonModes.rawValue))
   }
   
-  func stop() {
+  private func stop() {
     if displayLinkPaused{
       return
     }
