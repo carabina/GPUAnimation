@@ -33,7 +33,7 @@ class ExamplesViewController: UIViewController {
     }
     #if DEBUGMEMORY
 //      print(GPUAnimationMetaData.inited)
-      print(GPUAnimationBuilderContainer.inited)
+    print(GPUAnimationBuilderContainer.inited)
     #endif
   }
   

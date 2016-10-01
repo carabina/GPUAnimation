@@ -20,7 +20,6 @@ class ViewController: UIViewController {
   
   var countLabel: UILabel!
   var testViews:[UIView] = []
-  var animator = GPUSpringAnimator.sharedInstance
   var step = 0
   var timer:Timer?
   var stopGenerating = false
@@ -40,7 +39,7 @@ class ViewController: UIViewController {
 //    countLabel.text = "Hello World"
 //    animator.animate(view: countLabel, to: CGRect(x: 300, y: 30, width: 200, height: 40))
     
-    let library = AnimationLibrary.GPU
+    let library = AnimationLibrary.POP
     
     timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
       self.step += 1
@@ -124,7 +123,7 @@ class ViewController: UIViewController {
                         stiffness:CGFloat.random(lower: 100, 300),
                         damping:CGFloat.random(lower: 5, 50))
           } else {
-            k.animate{
+            k.animate {
               $0.stiffness = Float.random(lower: 100, 300)
               $0.damping = Float.random(lower: 5, 50)
               $0.center = CGPoint(x: CGFloat.random(lower: 50, width-50),
