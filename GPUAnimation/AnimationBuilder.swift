@@ -155,7 +155,7 @@ public class GPUAnimationBuilder{
     }
   }
   
-  private func step() {
+  @objc private func step() {
     currentRunningGroupIndex += 1
     currentRunningAnimation = [:]
     guard running else { return }
@@ -197,9 +197,11 @@ public class GPUAnimationBuilder{
         }
       }
     case .delay(let time):
-      self.timer = Timer.scheduledTimer(withTimeInterval: time, repeats: false) { timer in
-        self.step()
-      }
+      self.timer = Timer.scheduledTimer(timeInterval: time,
+                                        target: self,
+                                        selector: #selector(self.step),
+                                        userInfo: nil,
+                                        repeats: false)
     }
   }
   

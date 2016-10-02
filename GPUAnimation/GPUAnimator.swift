@@ -79,6 +79,8 @@ open class GPUSpringAnimator: NSObject {
     let dt = paramBuffer.content![0]
     for (_, i) in animationBuffer {
       let a = animationBuffer.content!.baseAddress!.advanced(by: i)
+      if (a.pointee.running == 0) { continue }
+      
       let diff = a.pointee.frame - a.pointee.target
       
       a.pointee.running = 0
