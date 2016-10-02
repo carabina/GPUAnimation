@@ -67,14 +67,41 @@ open class GPUSpringAnimator: NSObject {
   
   private override init(){
     super.init()
-    do {
-      paramBuffer.content![0] = 0
-      worker = try GPUWorker(functionName: "animate_main")
-      worker.addBuffer(buffer: animationBuffer)
-      worker.addBuffer(buffer: paramBuffer)
-      worker.completionCallback = doneProcessing
-    } catch let e {
-      print("\(e)")
+    paramBuffer.content![0] = 0
+    worker = GPUWorker(functionName: "springAnimate", fallback:springFallback)
+    worker.addBuffer(buffer: animationBuffer)
+    worker.addBuffer(buffer: paramBuffer)
+    worker.completionCallback = doneProcessing
+  }
+  
+  func springFallback(){
+    let dt = paramBuffer.content![0]
+    for (_, i) in animationBuffer {
+      let a = animationBuffer.content!.baseAddress!.advanced(by: i)
+      let diff = a.pointee.frame - a.pointee.target
+      
+      a.pointee.running = 0
+      let absV = abs(a.pointee.velocity)
+      let absD = abs(diff)
+      for c in [absD.x,absD.y,absD.z,absD.w,absV.x,absV.y,absV.z,absV.w]{
+        if c > a.pointee.threshold{
+          a.pointee.running = 1
+          break
+        }
+      }
+      
+      if a.pointee.running != 0 {
+        let Fspring = (-a.pointee.stiffness) * diff;
+        let Fdamper = (-a.pointee.damping) * a.pointee.velocity;
+        
+        let acceleration = Fspring + Fdamper;
+        
+        a.pointee.velocity = a.pointee.velocity + acceleration * dt;
+        a.pointee.frame = a.pointee.frame + a.pointee.velocity * dt;
+      } else {
+        a.pointee.velocity = float4();
+        a.pointee.frame = a.pointee.target;
+      }
     }
   }
   
@@ -160,9 +187,8 @@ open class GPUSpringAnimator: NSObject {
   }
   
   private func stop() {
-    if displayLinkPaused{
-      return
-    }
+    if displayLinkPaused{ return }
+    animationBuffer.clear()
     displayLink.isPaused = true
     displayLink.remove(from: RunLoop.main, forMode: RunLoopMode(rawValue: RunLoopMode.commonModes.rawValue))
     displayLink = nil

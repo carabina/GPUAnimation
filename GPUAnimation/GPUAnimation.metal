@@ -12,19 +12,11 @@ struct Animation {
   int running;
 };
 
-kernel void compute_main(
-                        uint2 gid                                    [[ thread_position_in_grid ]],
-                        device float4* params                  [[ buffer(0) ]]
-                        )
-{
-  params[gid.x].xyz += 5;
-}
-
-kernel void animate_main(
-                         uint2 gid                                    [[ thread_position_in_grid ]],
-                         device Animation* params                  [[ buffer(0) ]],
-                         constant float *dt                  [[ buffer(1) ]]
-                         )
+kernel void springAnimate(
+                          uint2 gid                                    [[ thread_position_in_grid ]],
+                          device Animation* params                  [[ buffer(0) ]],
+                          constant float *dt                  [[ buffer(1) ]]
+                          )
 {
   device Animation *a = &params[gid.x];
   float4 diff = a->frame - a->target;

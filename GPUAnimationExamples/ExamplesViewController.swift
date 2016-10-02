@@ -31,10 +31,6 @@ class ExamplesViewController: UIViewController {
         to.center = CGPoint(x:200, y:400)
       }
     }
-    #if DEBUGMEMORY
-//      print(GPUAnimationMetaData.inited)
-    print(GPUAnimationBuilderContainer.inited)
-    #endif
   }
   
   func test1(){
@@ -91,7 +87,7 @@ class ExamplesViewController: UIViewController {
     }
   }
   
-  lazy var storedAnimation:GPUAnimationBuilderContainer = self.square.animate{
+  lazy var storedAnimation:GPUAnimationBuilder = self.square.animate{
     $0.stiffness = 20
     $0.bounds = CGRect(x: 0, y: 0, width: 50, height: 500)
   }.then().animate{

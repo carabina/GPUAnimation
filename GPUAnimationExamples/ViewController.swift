@@ -35,7 +35,6 @@ class ViewController: UIViewController {
     
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
     
-//    var test = GPUWorkerTest()
 //    countLabel.text = "Hello World"
 //    animator.animate(view: countLabel, to: CGRect(x: 300, y: 30, width: 200, height: 40))
     
@@ -143,11 +142,6 @@ class ViewController: UIViewController {
   func tap(_ gr:UITapGestureRecognizer){
 //    let loc = gr.location(in: view)
     stopGenerating = !stopGenerating
-    
-    #if DEBUGMEMORY
-      print(GPUAnimationBuilder.inited)
-      print(GPUAnimationBuilderContainer.inited)
-    #endif
   }
 }
 
