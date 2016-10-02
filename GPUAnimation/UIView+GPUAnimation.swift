@@ -15,4 +15,7 @@ extension UIView{
   @discardableResult func animate(_ block:@escaping (AnimationTarget) -> Void) -> GPUAnimationBuilder{
     return GPUAnimationBuilder(view: self).animate(block)
   }
+  func stopAllAnimations(){
+    return GPUSpringAnimator.sharedInstance.remove(self)
+  }
 }

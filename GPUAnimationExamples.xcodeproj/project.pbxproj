@@ -32,7 +32,6 @@
 		A3E778661D9F604C0096C5C2 /* GPUWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPUWorker.swift; path = GPUAnimation/GPUWorker.swift; sourceTree = SOURCE_ROOT; };
 		A3E778681D9F604C0096C5C2 /* UIKit+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIKit+GPUAnimation.swift"; path = "GPUAnimation/UIKit+GPUAnimation.swift"; sourceTree = SOURCE_ROOT; };
 		A3E778691D9F604C0096C5C2 /* UIView+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+GPUAnimation.swift"; path = "GPUAnimation/UIView+GPUAnimation.swift"; sourceTree = SOURCE_ROOT; };
-		A3E778741D9F62ED0096C5C2 /* GPUAnimation.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = GPUAnimation.metal; sourceTree = "<group>"; };
 		A3E7787D1DA0B1BB0096C5C2 /* AnimationBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnimationBuilder.swift; path = GPUAnimation/AnimationBuilder.swift; sourceTree = SOURCE_ROOT; };
 		B11022021D9CED3200EDF9D0 /* GPUAnimationExamples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPUAnimationExamples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B11022051D9CED3200EDF9D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,14 +75,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A3E778731D9F62ED0096C5C2 /* GPUAnimation */ = {
-			isa = PBXGroup;
-			children = (
-				A3E778741D9F62ED0096C5C2 /* GPUAnimation.metal */,
-			);
-			path = GPUAnimation;
-			sourceTree = "<group>";
-		};
 		A3E7787B1D9F712D0096C5C2 /* Util */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,7 +88,6 @@
 			isa = PBXGroup;
 			children = (
 				B11022041D9CED3200EDF9D0 /* GPUAnimationExamples */,
-				A3E778731D9F62ED0096C5C2 /* GPUAnimation */,
 				B11022031D9CED3200EDF9D0 /* Products */,
 				1D8F3AF9347CA7F54786C097 /* Pods */,
 				947D032E0E9ECD6B1D7A4000 /* Frameworks */,

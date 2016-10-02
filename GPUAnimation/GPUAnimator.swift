@@ -59,7 +59,8 @@ open class GPUSpringAnimator: NSObject {
   
   private var displayLink : CADisplayLink!
   private var worker:GPUWorker!
-  private var animationBuffer = GPUBuffer<Int, GPUAnimationState, GPUAnimationMetaData>()
+  private var animating:[Int:Set<String>] = [:]
+  private var animationBuffer = GPUBuffer<String, GPUAnimationState, GPUAnimationMetaData>()
   private var paramBuffer = GPUBuffer<String, Float, Any>(1)
   private var queuedCommands = [()->()]()
   private var dt:Float = 0
@@ -139,11 +140,23 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
-  open func remove<T:Hashable>(_ item:T, key:String){
-    let animationKey = item.hashValue + key.hashValue
-    let removeFn = {
-      self.animationBuffer.metaDataFor(key: animationKey)?.completion?(false)
-      self.animationBuffer.remove(key: animationKey)
+  open func remove<T:Hashable>(_ item:T, key:String? = nil){
+    let removeFn:()->Void
+    if let key = key {
+      let animationKey = "\(item.hashValue)" + key
+      removeFn = {
+        self.animating[item.hashValue, withDefault:Set()].remove(key)
+        self.animationBuffer.metaDataFor(key: animationKey)?.completion?(false)
+        self.animationBuffer.remove(key: animationKey)
+      }
+    } else {
+      removeFn = {
+        for key in self.animating[item.hashValue, withDefault:Set()]{
+          let animationKey = "\(item.hashValue)" + key
+          self.animationBuffer.metaDataFor(key: animationKey)?.completion?(false)
+          self.animationBuffer.remove(key: animationKey)
+        }
+      }
     }
     if processing {
       queuedCommands.append(removeFn)
@@ -161,12 +174,13 @@ open class GPUSpringAnimator: NSObject {
                     damping:Float = 10,
                     threshold:Float = 0.01,
                     completion:((Bool) -> Void)? = nil) {
-    let animationKey = item.hashValue + key.hashValue
+    let animationKey = "\(item.hashValue)" + key
     let metaData = GPUAnimationMetaData(getter:getter, setter:setter, completion:completion)
     let state = GPUAnimationState(current: getter(), target: target, stiffness: stiffness, damping: damping, threshold: threshold)
     let insertFn = {
       self.animationBuffer.metaDataFor(key: animationKey)?.completion?(false)
       self.animationBuffer.add(key: animationKey, value: state, meta:metaData)
+      self.animating[item.hashValue, withDefault:Set()].insert(key)
       if self.displayLinkPaused {
         self.displayLinkPaused = false
       }

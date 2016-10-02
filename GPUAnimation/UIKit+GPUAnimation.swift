@@ -9,6 +9,20 @@
 import UIKit
 import MetalKit
 
+extension Dictionary {
+  subscript(key: Key, withDefault value: @autoclosure () -> Value) -> Value {
+    mutating get {
+      if self[key] == nil {
+        self[key] = value()
+      }
+      return self[key]!
+    }
+    set {
+      self[key] = newValue
+    }
+  }
+}
+
 public protocol GPUAnimatable{
   var toVec4:vector_float4 { get }
   mutating func fromVec4(_:vector_float4)
