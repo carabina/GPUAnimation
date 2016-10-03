@@ -73,7 +73,7 @@ class ViewController: UIViewController {
           k.animate{
             $0.stiffness = Float.random(lower: 100, 300)
             $0.damping = Float.random(lower: 5, 50)
-            $0.bounds = CGRect(x: 0,
+            $0.bounds.target = CGRect(x: 0,
                                y: 0,
                                width: CGFloat.random(lower: 100, 200),
                                height: CGFloat.random(lower: 100, 200))
@@ -125,9 +125,9 @@ class ViewController: UIViewController {
             k.animate {
               $0.stiffness = Float.random(lower: 100, 300)
               $0.damping = Float.random(lower: 5, 50)
-              $0.center = CGPoint(x: CGFloat.random(lower: 50, width-50),
+              $0.center.target = CGPoint(x: CGFloat.random(lower: 50, width-50),
                                   y: CGFloat.random(lower: 50, height-50))
-              $0.bounds = CGRect(x: 0,
+              $0.bounds.target = CGRect(x: 0,
                                  y: 0,
                                  width: CGFloat.random(lower: 100, 200),
                                  height: CGFloat.random(lower: 100, 200))
@@ -142,6 +142,10 @@ class ViewController: UIViewController {
   func tap(_ gr:UITapGestureRecognizer){
 //    let loc = gr.location(in: view)
     stopGenerating = !stopGenerating
+    #if DEBUGMEMORY
+    print(UIViewAnimationState.inited)
+    print(UIViewAnimationBuilder.inited)
+    #endif
   }
 }
 

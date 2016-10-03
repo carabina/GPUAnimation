@@ -9,9 +9,72 @@
 import UIKit
 import MetalKit
 
-var associationKey = "UIView+GPUAnimation"
+public struct Animatable<T:VectorConvertable>{
+  var target:T{
+    didSet{
+      build()
+    }
+  }
+  var onChange:((T)->Void)?{
+    didSet{
+      build()
+    }
+  }
+  var onVelocityChange:((T)->Void)?{
+    didSet{
+      build()
+    }
+  }
+  private unowned var viewState:UIViewAnimationState
+  private var key:String
+  
+  private var getter:() -> T
+  private var setter:(T) -> Void
 
-public class AnimationTarget{
+  private func build(){
+    let originalGetter = self.getter
+    let originalSetter = self.setter
+    let setter:((inout vector_float4) -> Void)
+    if onChange != nil && onVelocityChange != nil {
+      setter = { [originalSetter, onChange, onVelocityChange] value in
+        let v = T.fromVec4(value)
+        originalSetter(v)
+        onChange!(v)
+        onVelocityChange!(v)
+      }
+    } else if let onChange = onChange {
+      setter = { [originalSetter, onChange] value in
+        let v = T.fromVec4(value)
+        originalSetter(v)
+        onChange(v)
+      }
+    } else if let onVelocityChange = onVelocityChange {
+      setter = { [originalSetter, onVelocityChange] value in
+        let v = T.fromVec4(value)
+        originalSetter(v)
+        onVelocityChange(v)
+      }
+    } else {
+      setter = { [originalSetter] value in
+        originalSetter(T.fromVec4(value))
+      }
+    }
+    viewState.custom(key: key, getter: { return originalGetter().toVec4 }, setter: setter, target: target.toVec4)
+  }
+
+  init(viewState:UIViewAnimationState,
+       key:String,
+       getter:@escaping () -> T,
+       setter:@escaping (T) -> Void){
+    self.target = getter()
+    self.getter = getter
+    self.setter = setter
+    self.viewState = viewState
+    self.key = key
+  }
+}
+
+public class UIViewAnimationState{
   unowned var view:UIView
   internal var animations:[String:(((Bool)->Void)?) -> Void] = [:]
   init(view:UIView) {
@@ -48,74 +111,47 @@ public class AnimationTarget{
                                                completion: completion)
     }
   }
+
+  lazy var frame:Animatable<CGRect> = Animatable<CGRect>(viewState:self,
+                                                         key:"frame",
+                                                         getter:{ [view = self.view] in return view.frame },
+                                                         setter: { [view = self.view] in view.frame = $0})
   
-  private lazy var _frame:CGRect = self.view.frame
-  var frame:CGRect {
-    get { return _frame }
-    set {
-      _frame = newValue
-      let v = self.view
-      custom(key: "frame",
-             getter: { return v.frame.toVec4 },
-             setter: { nv in v.frame.fromVec4(nv) },
-             target: newValue.toVec4)
-    }
-  }
+  lazy var bounds:Animatable<CGRect> = Animatable<CGRect>(viewState:self,
+                                                          key:"bounds",
+                                                          getter:{ [view = self.view] in return view.bounds },
+                                                          setter: { [view = self.view] in view.bounds = $0})
   
-  private lazy var _bounds:CGRect = self.view.bounds
-  var bounds:CGRect {
-    get { return _bounds }
-    set {
-      _bounds = newValue
-      let v = self.view
-      custom(key: "bounds",
-             getter: { return v.bounds.toVec4 },
-             setter: { nv in v.bounds.fromVec4(nv) },
-             target: newValue.toVec4)
-    }
-  }
+  lazy var backgroundColor:Animatable<UIColor> = Animatable<UIColor>(viewState:self,
+                                                                     key:"backgroundColor",
+                                                                     getter:{ [view = self.view] in return view.backgroundColor! },
+                                                                     setter: { [view = self.view] in view.backgroundColor = $0})
   
-  private lazy var _backgroundColor:UIColor = self.view.backgroundColor ?? UIColor.white
-  var backgroundColor:UIColor {
-    get { return _backgroundColor }
-    set {
-      _backgroundColor = newValue
-      let v = self.view
-      custom(key: "backgroundColor",
-             getter: { return v.backgroundColor!.toVec4 },
-             setter: { nv in v.backgroundColor = UIColor.fromVec4(nv) },
-             target: newValue.toVec4)
-    }
-  }
+  lazy var center:Animatable<CGPoint> = Animatable<CGPoint>(viewState: self,
+                                                            key: "center",
+                                                            getter:{ [view = self.view] in return view.center },
+                                                            setter: { [view = self.view] in view.center = $0})
   
-  private lazy var _center:CGPoint = self.view.center
-  var center:CGPoint {
-    get { return _center }
-    set {
-      _center = newValue
-      let v = self.view
-      custom(key: "center",
-             getter: { return v.center.toVec4 },
-             setter: { nv in v.center.fromVec4(nv) },
-             target: newValue.toVec4)
-    }
-  }
+  lazy var alpha:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
+                                                           key: "alpha",
+                                                           getter:{ [view = self.view] in return view.alpha },
+                                                           setter: { [view = self.view] in view.alpha = $0})
 }
 
 
 
 
-internal enum AnimationGroup{
-  case animation([(AnimationTarget)->Void]);
+internal enum UIViewAnimationGroup{
+  case animation([(UIViewAnimationState)->Void]);
   case callback(()->());
   case delay(TimeInterval);
 }
 
-public class GPUAnimationBuilder{
+public class UIViewAnimationBuilder{
   
   private var executed = false
   unowned var view:UIView
-  private var groups:[AnimationGroup] = []
+  private var groups:[UIViewAnimationGroup] = []
   var currentRunningAnimation:[String:(((Bool)->Void)?) -> Void] = [:]
   var timer:Timer?
   
@@ -135,8 +171,8 @@ public class GPUAnimationBuilder{
     #endif
   }
   
-  func clone() -> GPUAnimationBuilder{
-    let c = GPUAnimationBuilder(view:view)
+  func clone() -> UIViewAnimationBuilder{
+    let c = UIViewAnimationBuilder(view:view)
     c.groups = groups
     return c
   }
@@ -168,7 +204,7 @@ public class GPUAnimationBuilder{
       }
     case .animation(let setupBlocks):
       for block in setupBlocks{
-        let target = AnimationTarget(view: self.view)
+        let target = UIViewAnimationState(view: self.view)
         block(target)
         for (k, v) in target.animations{
           currentRunningAnimation[k] = v
@@ -205,7 +241,7 @@ public class GPUAnimationBuilder{
     }
   }
   
-  @discardableResult func execute() -> GPUAnimationBuilder {
+  @discardableResult func execute() -> UIViewAnimationBuilder {
     stop()
     currentRunningGroupIndex = -1
     executed = true
@@ -214,12 +250,12 @@ public class GPUAnimationBuilder{
     return self
   }
   
-  @discardableResult func delay(_ time:CFTimeInterval) -> GPUAnimationBuilder{
+  @discardableResult func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
     groups.append(.delay(time))
     return self
   }
   
-  @discardableResult func stop() -> GPUAnimationBuilder{
+  @discardableResult func stop() -> UIViewAnimationBuilder{
     guard running else { return self }
     running = false
     timer?.invalidate()
@@ -229,16 +265,20 @@ public class GPUAnimationBuilder{
     return self
   }
   
-  @discardableResult func then(_ block:(() -> Void)? = nil) -> GPUAnimationBuilder{
-    if let block = block{
-      groups.append(AnimationGroup.callback(block))
-    } else {
-      groups.append(AnimationGroup.animation([]))
-    }
+  var then:UIViewAnimationBuilder{
+    groups.append(UIViewAnimationGroup.animation([]))
     return self
   }
+
+  @discardableResult func then(_ block:(() -> Void)? = nil) -> UIViewAnimationBuilder{
+    if let block = block{
+      groups.append(UIViewAnimationGroup.callback(block))
+      return self
+    }
+    return then
+  }
   
-  @discardableResult func animate(_ block:@escaping (AnimationTarget) -> Void) -> GPUAnimationBuilder{
+  @discardableResult func animate(_ block:@escaping (UIViewAnimationState) -> Void) -> UIViewAnimationBuilder{
     if let last = groups.last, case .animation(let animations) = last{
       groups.removeLast()
       groups.append(.animation(animations+[block]))

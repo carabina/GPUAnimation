@@ -23,47 +23,48 @@ extension Dictionary {
   }
 }
 
-public protocol GPUAnimatable{
-  var toVec4:vector_float4 { get }
-  mutating func fromVec4(_:vector_float4)
-}
-
-public protocol GPUAnimatableObject{
+public protocol VectorConvertable{
   var toVec4:vector_float4 { get }
   static func fromVec4(_ values: vector_float4) -> Self
 }
 
-extension CGRect:GPUAnimatable{
+extension CGFloat:VectorConvertable{
+  public var toVec4:vector_float4 {
+    return [Float(self), 0,0,0]
+  }
+  public static func fromVec4(_ values: vector_float4) -> CGFloat {
+    return CGFloat(values[0])
+  }
+}
+
+extension CGRect:VectorConvertable{
   public var toVec4:vector_float4 {
     return [Float(origin.x), Float(origin.y), Float(width), Float(height)]
   }
-  public mutating func fromVec4(_ vec4: vector_float4) {
-    origin.fromVec4(vec4)
-    size.fromVec4(vec4)
+  public static func fromVec4(_ values: vector_float4) -> CGRect {
+    return self.init(x: CGFloat(values.x), y: CGFloat(values.y), width: CGFloat(values.z), height: CGFloat(values.w))
   }
 }
 
-extension CGPoint:GPUAnimatable{
+extension CGPoint:VectorConvertable{
   public var toVec4:vector_float4 {
     return [Float(x), Float(y), 0, 0]
   }
-  public mutating func fromVec4(_ vec4: vector_float4) {
-    x = CGFloat(vec4.x)
-    y = CGFloat(vec4.y)
+  public static func fromVec4(_ values: vector_float4) -> CGPoint {
+    return self.init(x: CGFloat(values.x), y: CGFloat(values.y))
   }
 }
 
-extension CGSize:GPUAnimatable{
+extension CGSize:VectorConvertable{
   public var toVec4:vector_float4 {
-    return [0, 0, Float(width), Float(height)]
+    return [Float(width), Float(height), 0, 0]
   }
-  public mutating func fromVec4(_ vec4: vector_float4) {
-    width = CGFloat(vec4.z)
-    height = CGFloat(vec4.w)
+  public static func fromVec4(_ values: vector_float4) -> CGSize {
+    return self.init(width: CGFloat(values.x), height: CGFloat(values.y))
   }
 }
 
-extension UIColor:GPUAnimatableObject{
+extension UIColor:VectorConvertable{
   public var toVec4:vector_float4 {
     var r : CGFloat = 0
     var g : CGFloat = 0
