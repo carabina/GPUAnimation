@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  MetalLayoutTest
+//  GPUAnimationExamples
 //
 //  Created by YiLun Zhao on 2016-09-27.
 //  Copyright © 2016 Luke Zhao. All rights reserved.

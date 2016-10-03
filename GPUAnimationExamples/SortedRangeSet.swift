@@ -1,6 +1,6 @@
 //
 //  SortedRangeSet.swift
-//  MetalLayoutTest
+//  GPUAnimationExamples
 //
 //  Created by Luke Zhao on 2016-09-28.
 //  Copyright © 2016 Luke Zhao. All rights reserved.

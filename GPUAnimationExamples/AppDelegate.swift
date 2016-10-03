@@ -3,7 +3,7 @@
 //  GPUAnimationExamples
 //
 //  Created by Luke Zhao on 2016-09-29.
-//  Copyright © 2016 lkzhao. All rights reserved.
+//  Copyright © 2016 Luke Zhao. All rights reserved.
 //
 
 import UIKit
