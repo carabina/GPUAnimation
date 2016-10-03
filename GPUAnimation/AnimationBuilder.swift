@@ -9,6 +9,56 @@
 import UIKit
 import MetalKit
 
+public struct TransformAnimatable{
+  var target:CATransform3D{
+    didSet{
+      build()
+    }
+  }
+  
+  public mutating func rotate(by:CGFloat){
+    rotate(x: 0, y: 0, z: by)
+  }
+  public mutating func rotate(x:CGFloat, y:CGFloat, z:CGFloat){
+    var t = target
+    t = CATransform3DRotate(t, x, 1.0, 0, 0)
+    t = CATransform3DRotate(t, y, 0, 1.0, 0)
+    t = CATransform3DRotate(t, z, 0, 0, 1.0)
+    target = t
+  }
+  public mutating func scale(by:CGFloat){
+    scale(x:by,y:by,z:0)
+  }
+  public mutating func scale(x:CGFloat, y:CGFloat, z:CGFloat){
+    target = CATransform3DScale(target, x, y, z)
+  }
+  public mutating func translate(x:CGFloat, y:CGFloat, z:CGFloat){
+    target = CATransform3DTranslate(target,  x, y, z)
+  }
+  
+  
+  public mutating func resetToIdentity(){
+    target = CATransform3DIdentity
+    target.m34 = 1.0 / -500;
+  }
+
+  private unowned var viewState:UIViewAnimationState
+
+  private func build(){
+    for i in 0..<4{
+      viewState.custom(key: "transform\(i)",
+        getter: { [layer = self.viewState.view.layer] in return layer.transform[i] },
+        setter: { [layer = self.viewState.view.layer] nv in layer.transform[i] = nv },
+        target: target[i])
+    }
+  }
+
+  init(viewState:UIViewAnimationState){
+    self.viewState = viewState
+    self.target = self.viewState.view.layer.transform
+    self.target.m34 = 1.0 / -500;
+  }
+}
 public struct Animatable<T:VectorConvertable>{
   var target:T{
     didSet{
@@ -36,11 +86,12 @@ public struct Animatable<T:VectorConvertable>{
     let originalSetter = self.setter
     let setter:((inout vector_float4) -> Void)
     if onChange != nil && onVelocityChange != nil {
-      setter = { [originalSetter, onChange, onVelocityChange] value in
+      setter = { [view = viewState.view, key, originalSetter, onChange, onVelocityChange] value in
         let v = T.fromVec4(value)
+        let velocity = T.fromVec4(GPUSpringAnimator.sharedInstance.velocityFor(view, key:key))
         originalSetter(v)
         onChange!(v)
-        onVelocityChange!(v)
+        onVelocityChange!(velocity)
       }
     } else if let onChange = onChange {
       setter = { [originalSetter, onChange] value in
@@ -49,10 +100,11 @@ public struct Animatable<T:VectorConvertable>{
         onChange(v)
       }
     } else if let onVelocityChange = onVelocityChange {
-      setter = { [originalSetter, onVelocityChange] value in
+      setter = { [view = viewState.view, key, originalSetter, onVelocityChange] value in
         let v = T.fromVec4(value)
+        let velocity = T.fromVec4(GPUSpringAnimator.sharedInstance.velocityFor(view, key:key))
         originalSetter(v)
-        onVelocityChange(v)
+        onVelocityChange(velocity)
       }
     } else {
       setter = { [originalSetter] value in
@@ -91,7 +143,7 @@ public class UIViewAnimationState{
   }
   #endif
   
-  var stiffness:Float = 150
+  var stiffness:Float = 200
   var damping:Float = 10
   var threshold:Float = 0.01
   
@@ -126,6 +178,11 @@ public class UIViewAnimationState{
                                                                      key:"backgroundColor",
                                                                      getter:{ [view = self.view] in return view.backgroundColor! },
                                                                      setter: { [view = self.view] in view.backgroundColor = $0})
+
+  lazy var shadowColor:Animatable<UIColor> = Animatable<UIColor>(viewState:self,
+                                                                     key:"shadowColor",
+                                                                     getter:{ [view = self.view] in return UIColor(cgColor:view.layer.shadowColor!) },
+                                                                     setter: { [view = self.view] in view.layer.shadowColor = $0.cgColor })
   
   lazy var center:Animatable<CGPoint> = Animatable<CGPoint>(viewState: self,
                                                             key: "center",
@@ -136,6 +193,23 @@ public class UIViewAnimationState{
                                                            key: "alpha",
                                                            getter:{ [view = self.view] in return view.alpha },
                                                            setter: { [view = self.view] in view.alpha = $0})
+
+  lazy var shadowOffset:Animatable<CGSize> = Animatable<CGSize>(viewState: self,
+                                                           key: "shadowOffset",
+                                                           getter:{ [view = self.view] in return view.layer.shadowOffset },
+                                                           setter: { [view = self.view] in view.layer.shadowOffset = $0})
+
+  lazy var shadowOpacity:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
+                                                                   key: "shadowOpacity",
+                                                                   getter:{ [view = self.view] in return CGFloat(view.layer.shadowOpacity) },
+                                                                   setter: { [view = self.view] in view.layer.shadowOpacity = Float($0)})
+
+  lazy var shadowRadius:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
+                                                                  key: "shadowRadius",
+                                                                  getter:{ [view = self.view] in return view.layer.shadowRadius },
+                                                                  setter: { [view = self.view] in view.layer.shadowRadius = $0})
+
+  lazy var transform:TransformAnimatable = TransformAnimatable(viewState: self)
 }
 
 
@@ -242,7 +316,7 @@ public class UIViewAnimationBuilder{
   }
   
   @discardableResult func execute() -> UIViewAnimationBuilder {
-    stop()
+//    stop()
     currentRunningGroupIndex = -1
     executed = true
     running = true

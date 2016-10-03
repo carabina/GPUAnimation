@@ -23,57 +23,42 @@ extension Dictionary {
   }
 }
 
-public protocol VectorConvertable{
-  var toVec4:vector_float4 { get }
-  static func fromVec4(_ values: vector_float4) -> Self
-}
-
-extension CGFloat:VectorConvertable{
-  public var toVec4:vector_float4 {
-    return [Float(self), 0,0,0]
-  }
-  public static func fromVec4(_ values: vector_float4) -> CGFloat {
-    return CGFloat(values[0])
+extension CGFloat{
+  func clamp(_ a:CGFloat, _ b:CGFloat) -> CGFloat{
+    return self < a ? a : (self > b ? b : self)
   }
 }
-
-extension CGRect:VectorConvertable{
-  public var toVec4:vector_float4 {
-    return [Float(origin.x), Float(origin.y), Float(width), Float(height)]
+extension CGPoint{
+  func translate(_ dx:CGFloat, dy:CGFloat) -> CGPoint{
+    return CGPoint(x: self.x+dx, y: self.y+dy)
   }
-  public static func fromVec4(_ values: vector_float4) -> CGRect {
-    return self.init(x: CGFloat(values.x), y: CGFloat(values.y), width: CGFloat(values.z), height: CGFloat(values.w))
+  
+  func transform(_ t:CGAffineTransform) -> CGPoint{
+    return self.applying(t)
   }
-}
-
-extension CGPoint:VectorConvertable{
-  public var toVec4:vector_float4 {
-    return [Float(x), Float(y), 0, 0]
-  }
-  public static func fromVec4(_ values: vector_float4) -> CGPoint {
-    return self.init(x: CGFloat(values.x), y: CGFloat(values.y))
+  
+  func distance(_ b:CGPoint)->CGFloat{
+    return sqrt(pow(self.x-b.x,2)+pow(self.y-b.y,2));
   }
 }
-
-extension CGSize:VectorConvertable{
-  public var toVec4:vector_float4 {
-    return [Float(width), Float(height), 0, 0]
-  }
-  public static func fromVec4(_ values: vector_float4) -> CGSize {
-    return self.init(width: CGFloat(values.x), height: CGFloat(values.y))
-  }
+func +(left: CGPoint, right: CGPoint) -> CGPoint {
+  return CGPoint(x: left.x + right.x, y: left.y + right.y)
 }
-
-extension UIColor:VectorConvertable{
-  public var toVec4:vector_float4 {
-    var r : CGFloat = 0
-    var g : CGFloat = 0
-    var b : CGFloat = 0
-    var a : CGFloat = 0
-    self.getRed(&r, green: &g, blue: &b, alpha: &a)
-    return [Float(r),Float(g),Float(b),Float(a)]
-  }
-  public static func fromVec4(_ values: vector_float4) -> Self {
-    return self.init(red: CGFloat(values[0]), green: CGFloat(values[1]), blue: CGFloat(values[2]), alpha: CGFloat(values[3]))
-  }
+func -(left: CGPoint, right: CGPoint) -> CGPoint {
+  return CGPoint(x: left.x - right.x, y: left.y - right.y)
+}
+func /(left: CGPoint, right: CGFloat) -> CGPoint {
+  return CGPoint(x: left.x/right, y: left.y/right)
+}
+func *(left: CGPoint, right: CGFloat) -> CGPoint {
+  return CGPoint(x: left.x*right, y: left.y*right)
+}
+func *(left: CGFloat, right: CGPoint) -> CGPoint {
+  return right * left
+}
+func *(left: CGPoint, right: CGPoint) -> CGPoint {
+  return CGPoint(x: left.x*right.x, y: left.y*right.y)
+}
+prefix func -(point:CGPoint) -> CGPoint {
+  return CGPoint.zero - point
 }

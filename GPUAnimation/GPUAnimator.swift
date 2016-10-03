@@ -172,15 +172,18 @@ open class GPUSpringAnimator: NSObject {
                     getter:@escaping () -> vector_float4,
                     setter:@escaping (inout vector_float4) -> Void,
                     target:vector_float4,
-                    stiffness:Float = 150,
+                    stiffness:Float = 200,
                     damping:Float = 10,
                     threshold:Float = 0.01,
                     completion:((Bool) -> Void)? = nil) {
     let animationKey = "\(item.hashValue)" + key
     let metaData = GPUAnimationMetaData(getter:getter, setter:setter, completion:completion)
-    let state = GPUAnimationState(current: getter(), target: target, stiffness: stiffness, damping: damping, threshold: threshold)
+    var state = GPUAnimationState(current: getter(), target: target, stiffness: stiffness, damping: damping, threshold: threshold)
     let insertFn = {
       self.animationBuffer.metaDataFor(key: animationKey)?.completion?(false)
+      if let index = self.animationBuffer.indexOf(key: animationKey){
+        state.velocity = self.animationBuffer.content![index].velocity
+      }
       self.animationBuffer.add(key: animationKey, value: state, meta:metaData)
       self.animating[item.hashValue, withDefault:Set()].insert(key)
       if self.displayLinkPaused {
@@ -192,6 +195,13 @@ open class GPUSpringAnimator: NSObject {
     } else {
       insertFn()
     }
+  }
+  
+  public func velocityFor<T:Hashable>(_ item:T, key:String) -> vector_float4{
+    if let index = self.animationBuffer.indexOf(key: "\(item.hashValue)" + key){
+      return self.animationBuffer.content![index].velocity
+    }
+    return vector_float4()
   }
   
   private func start() {

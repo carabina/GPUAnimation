@@ -8,7 +8,7 @@
 
 import UIKit
 
-
+let π = CGFloat(M_PI)
 class ExamplesViewController: UIViewController {
   @IBOutlet weak var square: UIView!
 
@@ -16,17 +16,90 @@ class ExamplesViewController: UIViewController {
     super.viewDidLoad()
     
     square.layer.cornerRadius = 8
-    square.animate{
-      $0.alpha.target = 0
-      $0.alpha.onChange = {
-        print($0)
-      }
-    }.then.animate{
-      $0.alpha.target = 1
+    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
+    
+    square.addGestureRecognizer(LZPanGestureRecognizer(target: self, action: #selector(pan)))
+    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
+    let dTap = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
+    dTap.numberOfTapsRequired = 2
+    view.addGestureRecognizer(dTap)
+    
+    square.layer.shadowColor = square.backgroundColor?.cgColor
+    square.layer.shadowRadius = 30
+    square.layer.shadowOpacity = 0
+//    square.delay(2).animate{
+//      $0.alpha.target = 0
+//      $0.alpha.onChange = { newAlpha in
+//        print(newAlpha)
+//      }
+//    }.then.animate{
+//      $0.damping = 50
+//      $0.alpha.target = 1
+//    }.animate{
+//      $0.transform.rotate(by: Float(M_PI_2) )
+//      $0.transform.scale(by: 2.0)
+//    }.delay(2).animate{
+//      $0.transform.resetToIdentity()
+//    }
+  }
+  
+  var isBig = false
+  func doubleTap(_ gr:UITapGestureRecognizer){
+    let newSize = isBig ? CGSize(width: 100, height: 100) : CGSize(width: 200, height: 200)
+    isBig = !isBig
+    square.animate {
+      $0.bounds.target = CGRect(origin: CGPoint.zero, size: newSize)
     }
-//    square.animate{}
-//    test1()
-//    testAlloc()
+  }
+  
+  func onSquareVelocityChanged(velocity:CGPoint){
+    let maxRotate = π/3
+    let rotateX = -(velocity.y/1000).clamp(-maxRotate,maxRotate)
+    let rotateY = (velocity.x/1000).clamp(-maxRotate,maxRotate)
+    
+    self.square.animate{
+      $0.transform.resetToIdentity()
+      $0.transform.rotate(x: rotateX, y: rotateY, z: 0)
+      $0.alpha.target = 1 - max(abs(rotateY),abs(rotateX)) / π * 2
+      $0.shadowOffset.target = CGSize(width: rotateY*20, height:-rotateX*20)
+    }
+  }
+  
+  func tap(_ gr:UITapGestureRecognizer){
+    let loc = gr.location(in: view)
+    square.animate{
+      $0.center.target = loc
+      $0.center.onVelocityChange = self.onSquareVelocityChanged
+    }
+//    square.animate{
+//      $0.threshold = 10
+//      $0.stiffness = 300
+//      $0.transform.translate(x: -20, y: 0, z: 0)
+//    }.then.animate{
+//      $0.threshold = 10
+//      $0.stiffness = 300
+//      $0.transform.resetToIdentity()
+//      $0.transform.translate(x: 20, y: 0, z: 0)
+//    }.then.animate{
+//      $0.threshold = 10
+//      $0.stiffness = 300
+//      $0.transform.resetToIdentity()
+//      $0.transform.translate(x: -15, y: 0, z: 0)
+//    }.then.animate{
+//      $0.threshold = 1
+//      $0.stiffness = 300
+//      $0.transform.resetToIdentity()
+//    }
+  }
+  
+  func pan(_ gr:LZPanGestureRecognizer){
+    square.animate{
+      // high stiffness -> high acceleration (will help it stay under touch)
+      $0.stiffness = 700
+      $0.damping = 25
+      $0.center.target = gr.translatedViewCenterPoint
+      $0.center.onVelocityChange = self.onSquareVelocityChanged
+    }
   }
   
   func testAlloc(){
