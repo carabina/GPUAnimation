@@ -84,7 +84,7 @@ public struct Animatable<T:VectorConvertable>{
   private func build(){
     let originalGetter = self.getter
     let originalSetter = self.setter
-    let setter:((inout vector_float4) -> Void)
+    let setter:((inout float4) -> Void)
     if onChange != nil && onVelocityChange != nil {
       setter = { [view = viewState.view, key, originalSetter, onChange, onVelocityChange] value in
         let v = T.fromVec4(value)
@@ -148,9 +148,9 @@ public class UIViewAnimationState{
   var threshold:Float = 0.01
   
   func custom(key:String,
-              getter:@escaping () -> vector_float4,
-              setter:@escaping (inout vector_float4) -> Void,
-              target:vector_float4){
+              getter:@escaping () -> float4,
+              setter:@escaping (inout float4) -> Void,
+              target:float4){
     animations[key] = { [key, view, threshold, stiffness, damping] (completion) in
       GPUSpringAnimator.sharedInstance.animate(view,
                                                key: key,

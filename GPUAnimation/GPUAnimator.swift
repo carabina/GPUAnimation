@@ -14,15 +14,15 @@ import MetalKit
 fileprivate struct GPUAnimationState{
   // do not change the order of these variables
   // this struct is shared in Metal shader
-  var frame: vector_float4 = vector_float4()
-  var target: vector_float4
-  var velocity: vector_float4 = vector_float4()
+  var frame: float4 = float4()
+  var target: float4
+  var velocity: float4 = float4()
   var threshold: Float
   var stiffness: Float
   var damping: Float
   var running: Int32 = 1
 
-  init(current c:vector_float4, target t: vector_float4, stiffness s:Float = 150, damping d:Float = 10, threshold th:Float = 0.01) {
+  init(current c:float4, target t: float4, stiffness s:Float = 150, damping d:Float = 10, threshold th:Float = 0.01) {
     frame = c
     target = t
     threshold = th
@@ -31,8 +31,8 @@ fileprivate struct GPUAnimationState{
   }
 }
 
-public typealias GPUAnimationGetter = () -> vector_float4
-public typealias GPUAnimationSetter = (inout vector_float4) -> Void
+public typealias GPUAnimationGetter = () -> float4
+public typealias GPUAnimationSetter = (inout float4) -> Void
 
 fileprivate struct GPUAnimationMetaData{
   var getter:GPUAnimationGetter!
@@ -169,9 +169,9 @@ open class GPUSpringAnimator: NSObject {
   
   open func animate<T:Hashable>(_ item:T,
                     key:String,
-                    getter:@escaping () -> vector_float4,
-                    setter:@escaping (inout vector_float4) -> Void,
-                    target:vector_float4,
+                    getter:@escaping () -> float4,
+                    setter:@escaping (inout float4) -> Void,
+                    target:float4,
                     stiffness:Float = 200,
                     damping:Float = 10,
                     threshold:Float = 0.01,
@@ -197,11 +197,11 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
-  public func velocityFor<T:Hashable>(_ item:T, key:String) -> vector_float4{
+  public func velocityFor<T:Hashable>(_ item:T, key:String) -> float4{
     if let index = self.animationBuffer.indexOf(key: "\(item.hashValue)" + key){
       return self.animationBuffer.content![index].velocity
     }
-    return vector_float4()
+    return float4()
   }
   
   private func start() {

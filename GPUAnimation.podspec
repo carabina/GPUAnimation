@@ -15,8 +15,8 @@ Pod::Spec.new do |s|
   s.author           = { "Luke" => "me@lkzhao.com" }
   s.source           = { :git => "https://github.com/lkzhao/GPUAnimation.git" }
   
-  s.ios.deployment_target  = '8.0'
-  s.ios.frameworks         = 'UIKit', 'Foundation', 'Metal'
+  s.ios.deployment_target  = '9.0'
+  s.ios.frameworks         = 'UIKit','MetalKit','Accelerate'
 
   s.requires_arc = true
 
