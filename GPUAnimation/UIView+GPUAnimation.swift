@@ -23,13 +23,13 @@
 import UIKit
 
 extension UIView{
-  @discardableResult func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
+  @discardableResult public func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
     return UIViewAnimationBuilder(view: self).delay(time)
   }
-  @discardableResult func animate(_ block:@escaping (UIViewAnimationState) -> Void) -> UIViewAnimationBuilder{
+  @discardableResult public func animate(_ block:@escaping (UIViewAnimationState) -> Void) -> UIViewAnimationBuilder{
     return UIViewAnimationBuilder(view: self).animate(block)
   }
-  func stopAllAnimations(){
+  public func stopAllAnimations(){
     return GPUSpringAnimator.sharedInstance.remove(self)
   }
 }

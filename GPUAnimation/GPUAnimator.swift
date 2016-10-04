@@ -89,7 +89,7 @@ open class GPUSpringAnimator: NSObject {
     worker.completionCallback = doneProcessing
   }
   
-  func springFallback(){
+  private func springFallback(){
     let dt = paramBuffer.content![0]
     for (_, i) in animationBuffer {
       let a = animationBuffer.content!.baseAddress!.advanced(by: i)
@@ -156,7 +156,7 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
-  open func remove<T:Hashable>(_ item:T, key:String? = nil){
+  public func remove<T:Hashable>(_ item:T, key:String? = nil){
     let removeFn:()->Void
     if let key = key {
       let animationKey = "\(item.hashValue)" + key
@@ -181,7 +181,7 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
-  open func animate<T:Hashable>(_ item:T,
+  public func animate<T:Hashable>(_ item:T,
                     key:String,
                     getter:@escaping () -> float4,
                     setter:@escaping (inout float4) -> Void,

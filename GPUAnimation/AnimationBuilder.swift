@@ -74,17 +74,17 @@ public struct TransformAnimatable{
   }
 }
 public struct Animatable<T:VectorConvertable>{
-  var target:T{
+  public var target:T{
     didSet{
       build()
     }
   }
-  var onChange:((T)->Void)?{
+  public var onChange:((T)->Void)?{
     didSet{
       build()
     }
   }
-  var onVelocityChange:((T)->Void)?{
+  public var onVelocityChange:((T)->Void)?{
     didSet{
       build()
     }
@@ -157,11 +157,11 @@ public class UIViewAnimationState{
   }
   #endif
   
-  var stiffness:Float = 200
-  var damping:Float = 10
-  var threshold:Float = 0.01
+  public var stiffness:Float = 200
+  public var damping:Float = 10
+  public var threshold:Float = 0.01
   
-  func custom(key:String,
+  public func custom(key:String,
               getter:@escaping () -> float4,
               setter:@escaping (inout float4) -> Void,
               target:float4){
@@ -178,52 +178,52 @@ public class UIViewAnimationState{
     }
   }
 
-  lazy var frame:Animatable<CGRect> = Animatable<CGRect>(viewState:self,
+  public lazy var frame:Animatable<CGRect> = Animatable<CGRect>(viewState:self,
                                                          key:"frame",
                                                          getter:{ [view = self.view] in return view.frame },
                                                          setter: { [view = self.view] in view.frame = $0})
   
-  lazy var bounds:Animatable<CGRect> = Animatable<CGRect>(viewState:self,
+  public lazy var bounds:Animatable<CGRect> = Animatable<CGRect>(viewState:self,
                                                           key:"bounds",
                                                           getter:{ [view = self.view] in return view.bounds },
                                                           setter: { [view = self.view] in view.bounds = $0})
   
-  lazy var backgroundColor:Animatable<UIColor> = Animatable<UIColor>(viewState:self,
+  public lazy var backgroundColor:Animatable<UIColor> = Animatable<UIColor>(viewState:self,
                                                                      key:"backgroundColor",
                                                                      getter:{ [view = self.view] in return view.backgroundColor! },
                                                                      setter: { [view = self.view] in view.backgroundColor = $0})
 
-  lazy var shadowColor:Animatable<UIColor> = Animatable<UIColor>(viewState:self,
+  public lazy var shadowColor:Animatable<UIColor> = Animatable<UIColor>(viewState:self,
                                                                      key:"shadowColor",
                                                                      getter:{ [view = self.view] in return UIColor(cgColor:view.layer.shadowColor!) },
                                                                      setter: { [view = self.view] in view.layer.shadowColor = $0.cgColor })
   
-  lazy var center:Animatable<CGPoint> = Animatable<CGPoint>(viewState: self,
+  public lazy var center:Animatable<CGPoint> = Animatable<CGPoint>(viewState: self,
                                                             key: "center",
                                                             getter:{ [view = self.view] in return view.center },
                                                             setter: { [view = self.view] in view.center = $0})
   
-  lazy var alpha:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
+  public lazy var alpha:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
                                                            key: "alpha",
                                                            getter:{ [view = self.view] in return view.alpha },
                                                            setter: { [view = self.view] in view.alpha = $0})
 
-  lazy var shadowOffset:Animatable<CGSize> = Animatable<CGSize>(viewState: self,
+  public lazy var shadowOffset:Animatable<CGSize> = Animatable<CGSize>(viewState: self,
                                                            key: "shadowOffset",
                                                            getter:{ [view = self.view] in return view.layer.shadowOffset },
                                                            setter: { [view = self.view] in view.layer.shadowOffset = $0})
 
-  lazy var shadowOpacity:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
+  public lazy var shadowOpacity:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
                                                                    key: "shadowOpacity",
                                                                    getter:{ [view = self.view] in return CGFloat(view.layer.shadowOpacity) },
                                                                    setter: { [view = self.view] in view.layer.shadowOpacity = Float($0)})
 
-  lazy var shadowRadius:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
+  public lazy var shadowRadius:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
                                                                   key: "shadowRadius",
                                                                   getter:{ [view = self.view] in return view.layer.shadowRadius },
                                                                   setter: { [view = self.view] in view.layer.shadowRadius = $0})
 
-  lazy var transform:TransformAnimatable = TransformAnimatable(viewState: self)
+  public lazy var transform:TransformAnimatable = TransformAnimatable(viewState: self)
 }
 
 
@@ -240,11 +240,11 @@ public class UIViewAnimationBuilder{
   private var executed = false
   unowned var view:UIView
   private var groups:[UIViewAnimationGroup] = []
-  var currentRunningAnimation:[String:(((Bool)->Void)?) -> Void] = [:]
-  var timer:Timer?
+  private var currentRunningAnimation:[String:(((Bool)->Void)?) -> Void] = [:]
+  private var timer:Timer?
   
-  var running = false
-  var currentRunningGroupIndex = 0{
+  private(set) public var running = false
+  private var currentRunningGroupIndex = 0{
     didSet{
       if currentRunningGroupIndex >= groups.count {
         running = false
@@ -259,7 +259,7 @@ public class UIViewAnimationBuilder{
     #endif
   }
   
-  func clone() -> UIViewAnimationBuilder{
+  private func clone() -> UIViewAnimationBuilder{
     let c = UIViewAnimationBuilder(view:view)
     c.groups = groups
     return c
@@ -329,7 +329,7 @@ public class UIViewAnimationBuilder{
     }
   }
   
-  @discardableResult func execute() -> UIViewAnimationBuilder {
+  @discardableResult public func execute() -> UIViewAnimationBuilder {
 //    stop()
     currentRunningGroupIndex = -1
     executed = true
@@ -338,12 +338,12 @@ public class UIViewAnimationBuilder{
     return self
   }
   
-  @discardableResult func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
+  @discardableResult public func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
     groups.append(.delay(time))
     return self
   }
   
-  @discardableResult func stop() -> UIViewAnimationBuilder{
+  @discardableResult public func stop() -> UIViewAnimationBuilder{
     guard running else { return self }
     running = false
     timer?.invalidate()
@@ -353,12 +353,12 @@ public class UIViewAnimationBuilder{
     return self
   }
   
-  var then:UIViewAnimationBuilder{
+  public var then:UIViewAnimationBuilder{
     groups.append(UIViewAnimationGroup.animation([]))
     return self
   }
 
-  @discardableResult func then(_ block:(() -> Void)? = nil) -> UIViewAnimationBuilder{
+  @discardableResult public func then(_ block:(() -> Void)? = nil) -> UIViewAnimationBuilder{
     if let block = block{
       groups.append(UIViewAnimationGroup.callback(block))
       return self
@@ -366,7 +366,7 @@ public class UIViewAnimationBuilder{
     return then
   }
   
-  @discardableResult func animate(_ block:@escaping (UIViewAnimationState) -> Void) -> UIViewAnimationBuilder{
+  @discardableResult public func animate(_ block:@escaping (UIViewAnimationState) -> Void) -> UIViewAnimationBuilder{
     if let last = groups.last, case .animation(let animations) = last{
       groups.removeLast()
       groups.append(.animation(animations+[block]))

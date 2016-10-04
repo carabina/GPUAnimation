@@ -24,7 +24,7 @@ import UIKit
 import MetalKit
 
 extension Dictionary {
-  subscript(key: Key, withDefault value: @autoclosure () -> Value) -> Value {
+  internal subscript(key: Key, withDefault value: @autoclosure () -> Value) -> Value {
     mutating get {
       if self[key] == nil {
         self[key] = value()
@@ -38,41 +38,41 @@ extension Dictionary {
 }
 
 extension CGFloat{
-  func clamp(_ a:CGFloat, _ b:CGFloat) -> CGFloat{
+  internal func clamp(_ a:CGFloat, _ b:CGFloat) -> CGFloat{
     return self < a ? a : (self > b ? b : self)
   }
 }
 extension CGPoint{
-  func translate(_ dx:CGFloat, dy:CGFloat) -> CGPoint{
+  internal func translate(_ dx:CGFloat, dy:CGFloat) -> CGPoint{
     return CGPoint(x: self.x+dx, y: self.y+dy)
   }
   
-  func transform(_ t:CGAffineTransform) -> CGPoint{
+  internal func transform(_ t:CGAffineTransform) -> CGPoint{
     return self.applying(t)
   }
   
-  func distance(_ b:CGPoint)->CGFloat{
+  internal func distance(_ b:CGPoint)->CGFloat{
     return sqrt(pow(self.x-b.x,2)+pow(self.y-b.y,2));
   }
 }
-func +(left: CGPoint, right: CGPoint) -> CGPoint {
+internal func +(left: CGPoint, right: CGPoint) -> CGPoint {
   return CGPoint(x: left.x + right.x, y: left.y + right.y)
 }
-func -(left: CGPoint, right: CGPoint) -> CGPoint {
+internal func -(left: CGPoint, right: CGPoint) -> CGPoint {
   return CGPoint(x: left.x - right.x, y: left.y - right.y)
 }
-func /(left: CGPoint, right: CGFloat) -> CGPoint {
+internal func /(left: CGPoint, right: CGFloat) -> CGPoint {
   return CGPoint(x: left.x/right, y: left.y/right)
 }
-func *(left: CGPoint, right: CGFloat) -> CGPoint {
+internal func *(left: CGPoint, right: CGFloat) -> CGPoint {
   return CGPoint(x: left.x*right, y: left.y*right)
 }
-func *(left: CGFloat, right: CGPoint) -> CGPoint {
+internal func *(left: CGFloat, right: CGPoint) -> CGPoint {
   return right * left
 }
-func *(left: CGPoint, right: CGPoint) -> CGPoint {
+internal func *(left: CGPoint, right: CGPoint) -> CGPoint {
   return CGPoint(x: left.x*right.x, y: left.y*right.y)
 }
-prefix func -(point:CGPoint) -> CGPoint {
+internal prefix func -(point:CGPoint) -> CGPoint {
   return CGPoint.zero - point
 }
