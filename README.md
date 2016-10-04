@@ -82,7 +82,7 @@ view.animate {
 ```
 
 # Serial Execution
-Use `.then` or `.delay(time)` in order to seperate animations into serial groups.
+Use `.then` or `.delay(time)` to seperate animations into serial groups.
 
 For example below, `alpha` and `center` are animated first. Then `backgroundColor`. Then `bounds`
 ```swift
