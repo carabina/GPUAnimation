@@ -15,7 +15,7 @@ Save CPU time for handing events instead of calculation animation steps.
 * [Advance Controls](#advance-controls)
   * [Delay Animation](#delay-animation)
   * [Register Callback](#register-callback)
-  * [Observing value or velocity changes](#observe-value-or-velocity-changes)
+  * [Observing value or velocity changes](#observing-value-or-velocity-changes)
 * [UIView Animatable Properties](#uiview-animatable-properties)
 * [Animating Custom Properties](#animating-custom-properties)
 
@@ -151,7 +151,7 @@ view.animate{
   * translate
  
 # Animating Custom Properties
-for UIView
+### For UIView
 ```swift
 view.animate{
   $0.custom(key: "myCustomProperty",
@@ -161,7 +161,7 @@ view.animate{
 }
 ```
 
-for any other objects. You can use the underlying API provided by GPUAnimator
+### For any other objects. You can use the underlying API provided by GPUAnimator
 ```swift
 class GPUAnimator{
   func animate(_ item:T,
