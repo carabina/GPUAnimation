@@ -26,7 +26,15 @@ import MetalKit
 private class Shared {
   static var device: MTLDevice! = MTLCreateSystemDefaultDevice()
   static var queue: MTLCommandQueue! = device?.makeCommandQueue()
-  static var library: MTLLibrary! = device?.newDefaultLibrary()
+  static var metalAvaliable:Bool{
+    return library != nil
+  }
+  static var library: MTLLibrary! = {
+    if let device = device, let path = Bundle(for:Shared.self).path(forResource: "default", ofType: "metallib"){
+      return try? device.makeLibrary(filepath: path)
+    }
+    return nil
+  }()
 }
 
 public protocol GPUBufferType {
@@ -99,7 +107,7 @@ open class GPUBuffer<Key:Hashable, Value, MetaData>:Sequence, GPUBufferType {
 
   public func resize(size:Int){
     let oldSize = capacity
-    if Shared.device != nil {
+    if Shared.metalAvaliable {
       let newBuffer: MTLBuffer = Shared.device.makeBuffer(length: MemoryLayout<Value>.size * size, options: [.storageModeShared])
       if buffer != nil {
         memcpy(newBuffer.contents(), buffer!.contents(), Swift.min(size * MemoryLayout<Value>.size, buffer!.length))
@@ -132,7 +140,7 @@ open class GPUWorker {
   
   public init(functionName:String, fallback:(()->Void)? = nil) {
     self.fallbackFunction = fallback
-    if Shared.device != nil {
+    if Shared.metalAvaliable {
       computeFn = Shared.library.makeFunction(name: functionName)
       computePS = try? Shared.device.makeComputePipelineState(function: computeFn!)
       threadExecutionWidth = computePS!.threadExecutionWidth

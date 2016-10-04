@@ -19,5 +19,11 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
 
-  s.source_files = 'GPUAnimation/*'
+  s.source_files = 'GPUAnimation/*.swift'
+
+  s.resource_bundles = {
+      'GPUAnimation' => [
+          'GPUAnimation/*.metal'
+      ]
+    }
 end
