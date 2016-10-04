@@ -1,7 +1,11 @@
 # GPUAnimation
 #### Requires Swift 3, iOS 9
-A iOS UIKit Animation Library that uses the **Metal** for the heavy lifting.
-It provides an elegant swift API for animating any attributes you like.
+[![CocoaPods](https://img.shields.io/cocoapods/v/GPUAnimation.svg?maxAge=2592000)]()
+[![License](https://img.shields.io/cocoapods/l/GPUAnimation.svg?maxAge=2592000)]()
+[![Platform](https://img.shields.io/cocoapods/p/GPUAnimation.svg?maxAge=2592000)]()
+
+iOS UIKit Animation Library that uses the **Metal** for the heavy lifting.  
+It provides an elegant swift API for animating any attributes you like.  
 Save CPU time for handing events instead of calculation animation steps.
 
 **NOTE**: This is currently in **BETA**, use at caution.
@@ -99,7 +103,7 @@ view.animate {
 # Advance Controls
 ### Delay Animation
 ```swift
-view.delay(2) {
+view.delay(2).animate {
   // this animation is trigger after 2 seconds
   $0.alpha.target = 0.5
 }.delay(2).animate {
