@@ -9,9 +9,22 @@
 /* Begin PBXBuildFile section */
 		A3DF47471DA2FFCC0058B5F6 /* VectorConvertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF47461DA2FFCC0058B5F6 /* VectorConvertable.swift */; };
 		A3DF474B1DA30C610058B5F6 /* LZPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF474A1DA30C610058B5F6 /* LZPanGestureRecognizer.swift */; };
+		A3DF476D1DA360020058B5F6 /* BouncyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF476C1DA360020058B5F6 /* BouncyView.swift */; };
+		A3DF476F1DA360E00058B5F6 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF476E1DA360E00058B5F6 /* TestViewController.swift */; };
+		A3DF47771DA426920058B5F6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF47761DA426920058B5F6 /* AppDelegate.swift */; };
+		A3DF47791DA426920058B5F6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF47781DA426920058B5F6 /* ViewController.swift */; };
+		A3DF477B1DA426920058B5F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3DF477A1DA426920058B5F6 /* Assets.xcassets */; };
+		A3DF477E1DA426920058B5F6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3DF477C1DA426920058B5F6 /* Main.storyboard */; };
+		A3DF47831DA4280A0058B5F6 /* GPUAnimation.metal in Sources */ = {isa = PBXBuildFile; fileRef = A3E778641D9F604C0096C5C2 /* GPUAnimation.metal */; };
+		A3DF47841DA4280A0058B5F6 /* GPUAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778651D9F604C0096C5C2 /* GPUAnimator.swift */; };
+		A3DF47851DA4280A0058B5F6 /* GPUWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778661D9F604C0096C5C2 /* GPUWorker.swift */; };
+		A3DF47861DA4280A0058B5F6 /* CG+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778681D9F604C0096C5C2 /* CG+GPUAnimation.swift */; };
+		A3DF47871DA4280A0058B5F6 /* VectorConvertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF47461DA2FFCC0058B5F6 /* VectorConvertable.swift */; };
+		A3DF47881DA434C50058B5F6 /* AnimationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E7787D1DA0B1BB0096C5C2 /* AnimationBuilder.swift */; };
+		A3DF478E1DA439B70058B5F6 /* NSView+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF478C1DA439B70058B5F6 /* NSView+GPUAnimation.swift */; };
 		A3E7786B1D9F604C0096C5C2 /* GPUAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778651D9F604C0096C5C2 /* GPUAnimator.swift */; };
 		A3E7786C1D9F604C0096C5C2 /* GPUWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778661D9F604C0096C5C2 /* GPUWorker.swift */; };
-		A3E7786E1D9F604C0096C5C2 /* UIKit+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778681D9F604C0096C5C2 /* UIKit+GPUAnimation.swift */; };
+		A3E7786E1D9F604C0096C5C2 /* CG+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778681D9F604C0096C5C2 /* CG+GPUAnimation.swift */; };
 		A3E7786F1D9F604C0096C5C2 /* UIView+GPUAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E778691D9F604C0096C5C2 /* UIView+GPUAnimation.swift */; };
 		A3E7787C1DA0A5260096C5C2 /* GPUAnimation.metal in Sources */ = {isa = PBXBuildFile; fileRef = A3E778641D9F604C0096C5C2 /* GPUAnimation.metal */; };
 		A3E7787E1DA0B1BC0096C5C2 /* AnimationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E7787D1DA0B1BB0096C5C2 /* AnimationBuilder.swift */; };
@@ -27,10 +40,19 @@
 /* Begin PBXFileReference section */
 		A3DF47461DA2FFCC0058B5F6 /* VectorConvertable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VectorConvertable.swift; path = ../GPUAnimation/VectorConvertable.swift; sourceTree = "<group>"; };
 		A3DF474A1DA30C610058B5F6 /* LZPanGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LZPanGestureRecognizer.swift; sourceTree = "<group>"; };
+		A3DF476C1DA360020058B5F6 /* BouncyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BouncyView.swift; sourceTree = "<group>"; };
+		A3DF476E1DA360E00058B5F6 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		A3DF47741DA426920058B5F6 /* GPUAnimationExampleMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPUAnimationExampleMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3DF47761DA426920058B5F6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A3DF47781DA426920058B5F6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A3DF477A1DA426920058B5F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A3DF477D1DA426920058B5F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A3DF477F1DA426920058B5F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A3DF478C1DA439B70058B5F6 /* NSView+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSView+GPUAnimation.swift"; path = "GPUAnimation/NSView+GPUAnimation.swift"; sourceTree = SOURCE_ROOT; };
 		A3E778641D9F604C0096C5C2 /* GPUAnimation.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = GPUAnimation.metal; path = GPUAnimation/GPUAnimation.metal; sourceTree = SOURCE_ROOT; };
 		A3E778651D9F604C0096C5C2 /* GPUAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPUAnimator.swift; path = GPUAnimation/GPUAnimator.swift; sourceTree = SOURCE_ROOT; };
 		A3E778661D9F604C0096C5C2 /* GPUWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPUWorker.swift; path = GPUAnimation/GPUWorker.swift; sourceTree = SOURCE_ROOT; };
-		A3E778681D9F604C0096C5C2 /* UIKit+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIKit+GPUAnimation.swift"; path = "GPUAnimation/UIKit+GPUAnimation.swift"; sourceTree = SOURCE_ROOT; };
+		A3E778681D9F604C0096C5C2 /* CG+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CG+GPUAnimation.swift"; path = "GPUAnimation/CG+GPUAnimation.swift"; sourceTree = SOURCE_ROOT; };
 		A3E778691D9F604C0096C5C2 /* UIView+GPUAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+GPUAnimation.swift"; path = "GPUAnimation/UIView+GPUAnimation.swift"; sourceTree = SOURCE_ROOT; };
 		A3E7787D1DA0B1BB0096C5C2 /* AnimationBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnimationBuilder.swift; path = GPUAnimation/AnimationBuilder.swift; sourceTree = SOURCE_ROOT; };
 		B11022021D9CED3200EDF9D0 /* GPUAnimationExamples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPUAnimationExamples.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,6 +67,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A3DF47711DA426920058B5F6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B11021FF1D9CED3200EDF9D0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -55,6 +84,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A3DF47751DA426920058B5F6 /* GPUAnimationExampleMac */ = {
+			isa = PBXGroup;
+			children = (
+				A3DF47761DA426920058B5F6 /* AppDelegate.swift */,
+				A3DF47781DA426920058B5F6 /* ViewController.swift */,
+				A3DF477A1DA426920058B5F6 /* Assets.xcassets */,
+				A3DF477C1DA426920058B5F6 /* Main.storyboard */,
+				A3DF477F1DA426920058B5F6 /* Info.plist */,
+			);
+			path = GPUAnimationExampleMac;
+			sourceTree = "<group>";
+		};
 		A3E7787B1D9F712D0096C5C2 /* Util */ = {
 			isa = PBXGroup;
 			children = (
@@ -67,7 +108,9 @@
 		B11021F91D9CED3200EDF9D0 = {
 			isa = PBXGroup;
 			children = (
+				B11022291D9CEDCF00EDF9D0 /* GPUAnimation */,
 				B11022041D9CED3200EDF9D0 /* GPUAnimationExamples */,
+				A3DF47751DA426920058B5F6 /* GPUAnimationExampleMac */,
 				B11022031D9CED3200EDF9D0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -76,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				B11022021D9CED3200EDF9D0 /* GPUAnimationExamples.app */,
+				A3DF47741DA426920058B5F6 /* GPUAnimationExampleMac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -85,8 +129,9 @@
 			children = (
 				B11022051D9CED3200EDF9D0 /* AppDelegate.swift */,
 				B1AF47461D9DF9E50053A995 /* ExamplesViewController.swift */,
+				A3DF476E1DA360E00058B5F6 /* TestViewController.swift */,
+				A3DF476C1DA360020058B5F6 /* BouncyView.swift */,
 				A3DF474A1DA30C610058B5F6 /* LZPanGestureRecognizer.swift */,
-				B11022291D9CEDCF00EDF9D0 /* GPUAnimation */,
 				A3E7787B1D9F712D0096C5C2 /* Util */,
 				B11022091D9CED3200EDF9D0 /* Main.storyboard */,
 				B110220C1D9CED3200EDF9D0 /* Assets.xcassets */,
@@ -102,17 +147,36 @@
 				A3E778641D9F604C0096C5C2 /* GPUAnimation.metal */,
 				A3E778651D9F604C0096C5C2 /* GPUAnimator.swift */,
 				A3E778661D9F604C0096C5C2 /* GPUWorker.swift */,
-				A3E778681D9F604C0096C5C2 /* UIKit+GPUAnimation.swift */,
+				A3E778681D9F604C0096C5C2 /* CG+GPUAnimation.swift */,
 				A3DF47461DA2FFCC0058B5F6 /* VectorConvertable.swift */,
 				A3E778691D9F604C0096C5C2 /* UIView+GPUAnimation.swift */,
+				A3DF478C1DA439B70058B5F6 /* NSView+GPUAnimation.swift */,
 				A3E7787D1DA0B1BB0096C5C2 /* AnimationBuilder.swift */,
 			);
 			name = GPUAnimation;
+			path = GPUAnimationExamples;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A3DF47731DA426920058B5F6 /* GPUAnimationExampleMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3DF47801DA426920058B5F6 /* Build configuration list for PBXNativeTarget "GPUAnimationExampleMac" */;
+			buildPhases = (
+				A3DF47701DA426920058B5F6 /* Sources */,
+				A3DF47711DA426920058B5F6 /* Frameworks */,
+				A3DF47721DA426920058B5F6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GPUAnimationExampleMac;
+			productName = GPUAnimationExampleMac;
+			productReference = A3DF47741DA426920058B5F6 /* GPUAnimationExampleMac.app */;
+			productType = "com.apple.product-type.application";
+		};
 		B11022011D9CED3200EDF9D0 /* GPUAnimationExamples */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B11022141D9CED3200EDF9D0 /* Build configuration list for PBXNativeTarget "GPUAnimationExamples" */;
@@ -140,6 +204,10 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = lkzhao;
 				TargetAttributes = {
+					A3DF47731DA426920058B5F6 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
 					B11022011D9CED3200EDF9D0 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 4VSEW78TKT;
@@ -162,11 +230,21 @@
 			projectRoot = "";
 			targets = (
 				B11022011D9CED3200EDF9D0 /* GPUAnimationExamples */,
+				A3DF47731DA426920058B5F6 /* GPUAnimationExampleMac */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A3DF47721DA426920058B5F6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3DF477B1DA426920058B5F6 /* Assets.xcassets in Resources */,
+				A3DF477E1DA426920058B5F6 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B11022001D9CED3200EDF9D0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -180,13 +258,31 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A3DF47701DA426920058B5F6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3DF47881DA434C50058B5F6 /* AnimationBuilder.swift in Sources */,
+				A3DF47871DA4280A0058B5F6 /* VectorConvertable.swift in Sources */,
+				A3DF47791DA426920058B5F6 /* ViewController.swift in Sources */,
+				A3DF47771DA426920058B5F6 /* AppDelegate.swift in Sources */,
+				A3DF47831DA4280A0058B5F6 /* GPUAnimation.metal in Sources */,
+				A3DF47841DA4280A0058B5F6 /* GPUAnimator.swift in Sources */,
+				A3DF47851DA4280A0058B5F6 /* GPUWorker.swift in Sources */,
+				A3DF478E1DA439B70058B5F6 /* NSView+GPUAnimation.swift in Sources */,
+				A3DF47861DA4280A0058B5F6 /* CG+GPUAnimation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B11021FE1D9CED3200EDF9D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3DF476F1DA360E00058B5F6 /* TestViewController.swift in Sources */,
 				A3E7786C1D9F604C0096C5C2 /* GPUWorker.swift in Sources */,
 				A3DF47471DA2FFCC0058B5F6 /* VectorConvertable.swift in Sources */,
 				B11022061D9CED3200EDF9D0 /* AppDelegate.swift in Sources */,
+				A3DF476D1DA360020058B5F6 /* BouncyView.swift in Sources */,
 				A3E7786B1D9F604C0096C5C2 /* GPUAnimator.swift in Sources */,
 				A3E7787C1DA0A5260096C5C2 /* GPUAnimation.metal in Sources */,
 				B1AF47471D9DF9E50053A995 /* ExamplesViewController.swift in Sources */,
@@ -195,13 +291,21 @@
 				B11022211D9CEDC400EDF9D0 /* Random.swift in Sources */,
 				A3E7787E1DA0B1BC0096C5C2 /* AnimationBuilder.swift in Sources */,
 				B11022241D9CEDC400EDF9D0 /* SortedRangeSet.swift in Sources */,
-				A3E7786E1D9F604C0096C5C2 /* UIKit+GPUAnimation.swift in Sources */,
+				A3E7786E1D9F604C0096C5C2 /* CG+GPUAnimation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		A3DF477C1DA426920058B5F6 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A3DF477D1DA426920058B5F6 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		B11022091D9CED3200EDF9D0 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -221,6 +325,38 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		A3DF47811DA426920058B5F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = GPUAnimationExampleMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lkzhao.GPUAnimationExampleMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		A3DF47821DA426920058B5F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = GPUAnimationExampleMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lkzhao.GPUAnimationExampleMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 		B11022121D9CED3200EDF9D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -348,6 +484,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A3DF47801DA426920058B5F6 /* Build configuration list for PBXNativeTarget "GPUAnimationExampleMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3DF47811DA426920058B5F6 /* Debug */,
+				A3DF47821DA426920058B5F6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		B11021FD1D9CED3200EDF9D0 /* Build configuration list for PBXProject "GPUAnimationExamples" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

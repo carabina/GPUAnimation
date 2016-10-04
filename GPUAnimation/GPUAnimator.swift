@@ -20,10 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
 import MetalKit
-
-
 
 fileprivate struct GPUAnimationState{
   // do not change the order of these variables
@@ -71,9 +68,13 @@ open class GPUSpringAnimator: NSObject {
     }
   }
   
-  private var displayLink : CADisplayLink!
+  #if os(macOS)
+    private var displayLink : CVDisplayLink?
+  #elseif os(iOS)
+    private var displayLink : CADisplayLink?
+  #endif
   private var worker:GPUWorker!
-  private var animating:[Int:Set<String>] = [:]
+  private var animating = KeySet<Int, String>()
   private var animationBuffer = GPUBuffer<String, GPUAnimationState, GPUAnimationMetaData>()
   private var paramBuffer = GPUBuffer<String, Float, Any>(1)
   private var queuedCommands = [()->()]()
@@ -138,8 +139,8 @@ open class GPUSpringAnimator: NSObject {
     processing = false
   }
   
-  @objc private func update() {
-    dt += Float(displayLink.duration)
+  private func update(duration:Float) {
+    dt += duration
     if processing { return }
     
     if animationBuffer.count == 0{
@@ -161,13 +162,13 @@ open class GPUSpringAnimator: NSObject {
     if let key = key {
       let animationKey = "\(item.hashValue)" + key
       removeFn = {
-        self.animating[item.hashValue, withDefault:Set()].remove(key)
+        self.animating[item.hashValue].remove(key)
         self.animationBuffer.metaDataFor(key: animationKey)?.completion?(false)
         self.animationBuffer.remove(key: animationKey)
       }
     } else {
       removeFn = {
-        for key in self.animating[item.hashValue, withDefault:Set()]{
+        for key in self.animating[item.hashValue]{
           let animationKey = "\(item.hashValue)" + key
           self.animationBuffer.metaDataFor(key: animationKey)?.completion?(false)
           self.animationBuffer.remove(key: animationKey)
@@ -199,7 +200,7 @@ open class GPUSpringAnimator: NSObject {
         state.velocity = self.animationBuffer.content![index].velocity
       }
       self.animationBuffer.add(key: animationKey, value: state, meta:metaData)
-      self.animating[item.hashValue, withDefault:Set()].insert(key)
+      self.animating[item.hashValue].insert(key)
       if self.displayLinkPaused {
         self.displayLinkPaused = false
       }
@@ -222,15 +223,38 @@ open class GPUSpringAnimator: NSObject {
     if !displayLinkPaused {
       return
     }
-    displayLink = CADisplayLink(target: self, selector: #selector(update))
-    displayLink.add(to: RunLoop.main, forMode: RunLoopMode(rawValue: RunLoopMode.commonModes.rawValue))
+    
+    #if os(macOS)
+      CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
+      CVDisplayLinkSetOutputCallback(displayLink!, { (_, _, outTime, _, _, userInfo) -> CVReturn in
+        let this = Unmanaged<GPUSpringAnimator>.fromOpaque(userInfo!).takeUnretainedValue()
+        let out = outTime.pointee
+        let duration = Float(1.0 / (out.rateScalar * Double(out.videoTimeScale) / Double(out.videoRefreshPeriod)))
+        this.update(duration:duration)
+        return kCVReturnSuccess
+      }, UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque()))
+      CVDisplayLinkStart(displayLink!)
+    #elseif os(iOS)
+      displayLink = CADisplayLink(target: self, selector: #selector(updateIOS))
+      displayLink!.add(to: RunLoop.main, forMode: RunLoopMode(rawValue: RunLoopMode.commonModes.rawValue))
+    #endif
   }
   
+  #if os(iOS)
+  @objc private func updateIOS(){
+    self.update(duration:Float(displayLink!.duration))
+  }
+  #endif
+  
   private func stop() {
-    if displayLinkPaused{ return }
+    if displayLinkPaused { return }
     animationBuffer.clear()
-    displayLink.isPaused = true
-    displayLink.remove(from: RunLoop.main, forMode: RunLoopMode(rawValue: RunLoopMode.commonModes.rawValue))
+    #if os(macOS)
+      CVDisplayLinkStop(displayLink!)
+    #elseif os(iOS)
+      displayLink!.isPaused = true
+      displayLink!.remove(from: RunLoop.main, forMode: RunLoopMode(rawValue: RunLoopMode.commonModes.rawValue))
+    #endif
     displayLink = nil
   }
 }

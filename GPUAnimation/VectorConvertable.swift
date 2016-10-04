@@ -20,9 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
 import MetalKit
-
 
 extension CATransform3D{
   public subscript(index: Int) -> float4{
@@ -107,19 +105,5 @@ extension CGSize:VectorConvertable{
   }
   public static func fromVec4(_ values: float4) -> CGSize {
     return self.init(width: CGFloat(values.x), height: CGFloat(values.y))
-  }
-}
-
-extension UIColor:VectorConvertable{
-  public var toVec4:float4 {
-    var r : CGFloat = 0
-    var g : CGFloat = 0
-    var b : CGFloat = 0
-    var a : CGFloat = 0
-    self.getRed(&r, green: &g, blue: &b, alpha: &a)
-    return [Float(r),Float(g),Float(b),Float(a)]
-  }
-  public static func fromVec4(_ values: float4) -> Self {
-    return self.init(red: CGFloat(values[0]), green: CGFloat(values[1]), blue: CGFloat(values[2]), alpha: CGFloat(values[3]))
   }
 }

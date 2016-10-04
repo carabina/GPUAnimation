@@ -22,7 +22,6 @@
 
 import MetalKit
 
-
 private class Shared {
   static var device: MTLDevice! = MTLCreateSystemDefaultDevice()
   static var queue: MTLCommandQueue! = device?.makeCommandQueue()
@@ -52,7 +51,7 @@ open class GPUBuffer<Key:Hashable, Value, MetaData>:Sequence, GPUBufferType {
 
   private var freeIndexes:[Int] = []
   private var managed:[Key:Int] = [:]
-  private var metaData:[Key:MetaData] = [:]
+  private var metaData:[MetaData?] = []
   
   public var capacity:Int{
     return content?.count ?? 0
@@ -73,14 +72,14 @@ open class GPUBuffer<Key:Hashable, Value, MetaData>:Sequence, GPUBufferType {
   public func remove(key:Key){
     if let i = managed[key] {
       managed[key] = nil
-      metaData[key] = nil
+      metaData[i] = nil
       freeIndexes.append(i)
     }
   }
   
   public func add(key:Key, value:Value, meta:MetaData? = nil){
     if let i = managed[key] {
-      metaData[key] = meta
+      metaData[i] = meta
       content![i] = value
     } else {
       if freeIndexes.count == 0 {
@@ -88,13 +87,16 @@ open class GPUBuffer<Key:Hashable, Value, MetaData>:Sequence, GPUBufferType {
       }
       let i = freeIndexes.popLast()!
       managed[key] = i
-      metaData[key] = meta
+      metaData[i] = meta
       content![i] = value
     }
   }
   
   public func metaDataFor(key:Key) -> MetaData?{
-    return metaData[key]
+    if let i = managed[key] {
+      return metaData[i]
+    }
+    return nil
   }
   
   public func clear(){
@@ -102,7 +104,7 @@ open class GPUBuffer<Key:Hashable, Value, MetaData>:Sequence, GPUBufferType {
     buffer = nil
     freeIndexes = []
     managed = [:]
-    metaData = [:]
+    metaData = []
   }
 
   public func resize(size:Int){
@@ -123,9 +125,9 @@ open class GPUBuffer<Key:Hashable, Value, MetaData>:Sequence, GPUBufferType {
       }
       content = UnsafeMutableBufferPointer(start: newLoc, count: size)
     }
-    
     for i in oldSize..<content!.count{
       freeIndexes.append(i)
+      metaData.append(nil)
     }
   }
 }
@@ -144,7 +146,7 @@ open class GPUWorker {
       computeFn = Shared.library.makeFunction(name: functionName)
       computePS = try? Shared.device.makeComputePipelineState(function: computeFn!)
       threadExecutionWidth = computePS!.threadExecutionWidth
-    } else {
+    } else if _isDebugAssertConfiguration() {
       print("GPUAnimation: Metal Not Avaliable, using fallback function for \(functionName)")
     }
   }

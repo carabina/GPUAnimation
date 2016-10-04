@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "GPUAnimation"
-  s.version          = "0.0.3"
+  s.version          = "0.0.4"
   s.summary          = "iOS Animation Made Fast and Simple."
 
   s.description      = <<-DESC

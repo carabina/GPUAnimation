@@ -20,20 +20,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
 import MetalKit
 
-extension Dictionary {
-  internal subscript(key: Key, withDefault value: @autoclosure () -> Value) -> Value {
+internal struct KeySet<Key:Hashable, Value:Hashable>{
+  var dict:[Key:Set<Value>] = [:]
+  internal subscript(key: Key) -> Set<Value> {
     mutating get {
-      if self[key] == nil {
-        self[key] = value()
+      if dict[key] == nil {
+        dict[key] = Set<Value>()
       }
-      return self[key]!
+      return dict[key]!
     }
     set {
-      self[key] = newValue
+      dict[key] = newValue
     }
+  }
+}
+
+extension CGRect{
+//  internal var leftEdgeValue:CGFloat{
+//    return origin.x
+//  }
+//  internal var rightEdgeValue:CGFloat{
+//    return origin.x + size.width
+//  }
+//  internal var topEdgeValue:CGFloat{
+//    return origin.y
+//  }
+//  internal var bottomEdgeValue:CGFloat{
+//    return origin.y + size.height
+//  }
+//  internal var edges:UIEdgeInsets{
+//    return UIEdgeInsetsMake(topEdgeValue, leftEdgeValue, bottomEdgeValue, rightEdgeValue)
+//  }
+  internal var center:CGPoint{
+    return CGPoint(x: origin.x + size.width/2, y: origin.y + size.height/2)
+  }
+  internal var bounds:CGRect{
+    return CGRect(origin: CGPoint.zero, size: size)
   }
 }
 

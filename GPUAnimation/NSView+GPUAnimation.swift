@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
+import AppKit
 import MetalKit
 
-extension UIColor:VectorConvertable{
+extension NSColor:VectorConvertable{
   public var toVec4:float4 {
     var r : CGFloat = 0
     var g : CGFloat = 0
@@ -37,7 +37,7 @@ extension UIColor:VectorConvertable{
   }
 }
 
-extension UIView{
+extension NSView{
   @discardableResult public func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
     return UIViewAnimationBuilder(view: self).delay(time)
   }
