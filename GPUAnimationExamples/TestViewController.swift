@@ -68,7 +68,7 @@ class TestViewController:UIViewController{
     }
   }
   
-  lazy var storedAnimation:UIViewAnimationBuilder = self.square.animate{
+  lazy var storedAnimation:ViewAnimationBuilder = self.square.animate{
     $0.stiffness = 20
     $0.bounds.target = CGRect(x: 0, y: 0, width: 50, height: 500)
     }.then().animate{

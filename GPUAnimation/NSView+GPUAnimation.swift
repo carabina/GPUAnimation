@@ -25,12 +25,10 @@ import MetalKit
 
 extension NSColor:VectorConvertable{
   public var toVec4:float4 {
-    var r : CGFloat = 0
-    var g : CGFloat = 0
-    var b : CGFloat = 0
-    var a : CGFloat = 0
-    self.getRed(&r, green: &g, blue: &b, alpha: &a)
-    return [Float(r),Float(g),Float(b),Float(a)]
+    if colorSpace == .genericGray{
+      return [Float(whiteComponent),Float(whiteComponent),Float(whiteComponent),Float(alphaComponent)]
+    }
+    return [Float(redComponent),Float(greenComponent),Float(blueComponent),Float(alphaComponent)]
   }
   public static func fromVec4(_ values: float4) -> Self {
     return self.init(red: CGFloat(values[0]), green: CGFloat(values[1]), blue: CGFloat(values[2]), alpha: CGFloat(values[3]))
@@ -38,11 +36,19 @@ extension NSColor:VectorConvertable{
 }
 
 extension NSView{
-  @discardableResult public func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
-    return UIViewAnimationBuilder(view: self).delay(time)
+  var center:CGPoint{
+    get{
+      return frame.center
+    }
+    set{
+      frame = CGRect(center: newValue, size: frame.size)
+    }
   }
-  @discardableResult public func animate(_ block:@escaping (ViewAnimationState) -> Void) -> UIViewAnimationBuilder{
-    return UIViewAnimationBuilder(view: self).animate(block)
+  @discardableResult public func delay(_ time:CFTimeInterval) -> ViewAnimationBuilder{
+    return ViewAnimationBuilder(view: self).delay(time)
+  }
+  @discardableResult public func animate(_ block:@escaping (ViewAnimationState) -> Void) -> ViewAnimationBuilder{
+    return ViewAnimationBuilder(view: self).animate(block)
   }
   public func stopAllAnimations(){
     return GPUSpringAnimator.sharedInstance.remove(self)

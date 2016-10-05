@@ -38,11 +38,11 @@ extension UIColor:VectorConvertable{
 }
 
 extension UIView{
-  @discardableResult public func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
-    return UIViewAnimationBuilder(view: self).delay(time)
+  @discardableResult public func delay(_ time:CFTimeInterval) -> ViewAnimationBuilder{
+    return ViewAnimationBuilder(view: self).delay(time)
   }
-  @discardableResult public func animate(_ block:@escaping (ViewAnimationState) -> Void) -> UIViewAnimationBuilder{
-    return UIViewAnimationBuilder(view: self).animate(block)
+  @discardableResult public func animate(_ block:@escaping (ViewAnimationState) -> Void) -> ViewAnimationBuilder{
+    return ViewAnimationBuilder(view: self).animate(block)
   }
   public func stopAllAnimations(){
     return GPUSpringAnimator.sharedInstance.remove(self)

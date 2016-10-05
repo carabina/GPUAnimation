@@ -167,6 +167,14 @@ public class ViewAnimationState{
   }
   #endif
   
+  var layer:CALayer{
+    #if os(macOS)
+      return view.layer!
+    #elseif os(iOS)
+      return view.layer
+    #endif
+  }
+  
   public var stiffness:Float = 200
   public var damping:Float = 10
   public var threshold:Float = 0.01
@@ -197,9 +205,68 @@ public class ViewAnimationState{
                                                                  key:"bounds",
                                                                  getter:{ [view = self.view] in return view.bounds },
                                                                  setter: { [view = self.view] in view.bounds = $0})
+  
+  public lazy var position:Animatable<CGPoint> = Animatable<CGPoint>(viewState: self,
+                                                                     key: "position",
+                                                                     getter:{ [view = self.view] in return view.frame.origin },
+                                                                     setter: { [view = self.view] in view.frame.origin = $0})
+
+  public lazy var center:Animatable<CGPoint> =
+    Animatable<CGPoint>(viewState: self,
+                        key: "center",
+                        getter:{ [view = self.view] in return view.center },
+                        setter: { [view = self.view] in view.center = $0})
+  
+  
+  
+  public lazy var shadowOffset:Animatable<CGSize> = Animatable<CGSize>(viewState: self,
+                                                                       key: "shadowOffset",
+                                                                       getter:{ [layer = self.layer] in return layer.shadowOffset },
+                                                                       setter: { [layer = self.layer] in layer.shadowOffset = $0})
+  
+  public lazy var shadowOpacity:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
+                                                                          key: "shadowOpacity",
+                                                                          getter:{ [layer = self.layer] in return CGFloat(layer.shadowOpacity) },
+                                                                          setter: { [layer = self.layer] in layer.shadowOpacity = Float($0)})
+  
+  public lazy var shadowRadius:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
+                                                                         key: "shadowRadius",
+                                                                         getter:{ [layer = self.layer] in return layer.shadowRadius },
+                                                                         setter: { [layer = self.layer] in layer.shadowRadius = $0})
+  
+  public lazy var alpha:Animatable<Float> = Animatable<Float>(viewState: self,
+                                                                  key: "alpha",
+                                                                  getter:{ [layer = self.layer] in return layer.opacity },
+                                                                  setter: { [layer = self.layer] in layer.opacity = $0})
+  
+  public lazy var transform:TransformAnimatable = TransformAnimatable(viewState: self)
+
 #if os(macOS)
   
+  public lazy var backgroundColor:Animatable<NSColor> =
+    Animatable<NSColor>(viewState:self,
+                        key:"backgroundColor",
+                        getter:{ [layer = self.layer] in
+                          if let bc = layer.backgroundColor{
+                            return NSColor(cgColor:bc)!
+                          }
+                          return NSColor.clear
+                        },
+                        setter: { [layer = self.layer] in layer.backgroundColor = $0.cgColor })
+
+  public lazy var shadowColor:Animatable<NSColor> =
+    Animatable<NSColor>(viewState:self,
+                        key:"shadowColor",
+                        getter:{ [layer = self.layer] in
+                          if let bc = layer.shadowColor{
+                            return NSColor(cgColor:bc)!
+                          }
+                          return NSColor.clear
+                        },
+                        setter: { [layer = self.layer] in layer.shadowColor = $0.cgColor })
+  
 #elseif os(iOS)
+
   public lazy var backgroundColor:Animatable<UIColor> = Animatable<UIColor>(viewState:self,
   key:"backgroundColor",
   getter:{ [view = self.view] in return view.backgroundColor! },
@@ -209,46 +276,20 @@ public class ViewAnimationState{
   key:"shadowColor",
   getter:{ [view = self.view] in return UIColor(cgColor:view.layer.shadowColor!) },
   setter: { [view = self.view] in view.layer.shadowColor = $0.cgColor })
-  
-  public lazy var center:Animatable<CGPoint> = Animatable<CGPoint>(viewState: self,
-  key: "center",
-  getter:{ [view = self.view] in return view.center },
-  setter: { [view = self.view] in view.center = $0})
-  
-  public lazy var alpha:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
-  key: "alpha",
-  getter:{ [view = self.view] in return view.alpha },
-  setter: { [view = self.view] in view.alpha = $0})
-  
-  public lazy var shadowOffset:Animatable<CGSize> = Animatable<CGSize>(viewState: self,
-  key: "shadowOffset",
-  getter:{ [view = self.view] in return view.layer.shadowOffset },
-  setter: { [view = self.view] in view.layer.shadowOffset = $0})
-  
-  public lazy var shadowOpacity:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
-  key: "shadowOpacity",
-  getter:{ [view = self.view] in return CGFloat(view.layer.shadowOpacity) },
-  setter: { [view = self.view] in view.layer.shadowOpacity = Float($0)})
-  
-  public lazy var shadowRadius:Animatable<CGFloat> = Animatable<CGFloat>(viewState: self,
-  key: "shadowRadius",
-  getter:{ [view = self.view] in return view.layer.shadowRadius },
-  setter: { [view = self.view] in view.layer.shadowRadius = $0})
-#endif
 
-  public lazy var transform:TransformAnimatable = TransformAnimatable(viewState: self)
+#endif
 }
 
 
 
 
-internal enum UIViewAnimationGroup{
+internal enum ViewAnimationGroup{
   case animation([(ViewAnimationState)->Void]);
   case callback(()->());
   case delay(TimeInterval);
 }
 
-public class UIViewAnimationBuilder{
+public class ViewAnimationBuilder{
   #if os(macOS)
   unowned var view:NSView
   init(view:NSView) {
@@ -262,7 +303,7 @@ public class UIViewAnimationBuilder{
   #endif
   
   private var executed = false
-  private var groups:[UIViewAnimationGroup] = []
+  private var groups:[ViewAnimationGroup] = []
   private var currentRunningAnimation:[String:(((Bool)->Void)?) -> Void] = [:]
   private var timer:Timer?
   
@@ -275,8 +316,8 @@ public class UIViewAnimationBuilder{
     }
   }
   
-  private func clone() -> UIViewAnimationBuilder{
-    let c = UIViewAnimationBuilder(view:view)
+  private func clone() -> ViewAnimationBuilder{
+    let c = ViewAnimationBuilder(view:view)
     c.groups = groups
     return c
   }
@@ -339,21 +380,27 @@ public class UIViewAnimationBuilder{
     }
   }
   
-  @discardableResult public func execute() -> UIViewAnimationBuilder {
-//    stop()
-    currentRunningGroupIndex = -1
+  @discardableResult public func execute() -> ViewAnimationBuilder {
+    //    stop()
     executed = true
+    #if os(macOS)
+      if view.layer == nil{
+        print("GPU Animated view must be layer backed")
+        return self
+      }
+    #endif
+    currentRunningGroupIndex = -1
     running = true
     step()
     return self
   }
   
-  @discardableResult public func delay(_ time:CFTimeInterval) -> UIViewAnimationBuilder{
+  @discardableResult public func delay(_ time:CFTimeInterval) -> ViewAnimationBuilder{
     groups.append(.delay(time))
     return self
   }
   
-  @discardableResult public func stop() -> UIViewAnimationBuilder{
+  @discardableResult public func stop() -> ViewAnimationBuilder{
     guard running else { return self }
     running = false
     timer?.invalidate()
@@ -363,20 +410,20 @@ public class UIViewAnimationBuilder{
     return self
   }
   
-  public var then:UIViewAnimationBuilder{
-    groups.append(UIViewAnimationGroup.animation([]))
+  public var then:ViewAnimationBuilder{
+    groups.append(ViewAnimationGroup.animation([]))
     return self
   }
 
-  @discardableResult public func then(_ block:(() -> Void)? = nil) -> UIViewAnimationBuilder{
+  @discardableResult public func then(_ block:(() -> Void)? = nil) -> ViewAnimationBuilder{
     if let block = block{
-      groups.append(UIViewAnimationGroup.callback(block))
+      groups.append(ViewAnimationGroup.callback(block))
       return self
     }
     return then
   }
   
-  @discardableResult public func animate(_ block:@escaping (ViewAnimationState) -> Void) -> UIViewAnimationBuilder{
+  @discardableResult public func animate(_ block:@escaping (ViewAnimationState) -> Void) -> ViewAnimationBuilder{
     if let last = groups.last, case .animation(let animations) = last{
       groups.removeLast()
       groups.append(.animation(animations+[block]))

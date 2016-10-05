@@ -16,7 +16,6 @@ class ExamplesViewController: UIViewController {
     super.viewDidLoad()
     
     square.layer.cornerRadius = 8
-    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
     
     square.addGestureRecognizer(LZPanGestureRecognizer(target: self, action: #selector(pan)))
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
@@ -46,7 +45,7 @@ class ExamplesViewController: UIViewController {
     self.square.animate{
       $0.transform.resetToIdentity()
       $0.transform.rotate(x: rotateX, y: rotateY, z: 0)
-      $0.alpha.target = 1 - max(abs(rotateY),abs(rotateX)) / π * 2
+      $0.alpha.target = Float(1.0 - max(abs(rotateY),abs(rotateX)) / π * 2)
       $0.shadowOffset.target = CGSize(width: rotateY*20, height:-rotateX*20)
     }
   }

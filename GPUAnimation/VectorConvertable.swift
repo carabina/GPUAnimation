@@ -22,6 +22,17 @@
 
 import MetalKit
 
+extension CALayer{
+  var center:CGPoint{
+    get{
+      return CGPoint(x: position.x + bounds.size.width/2, y: position.y + bounds.size.height/2)
+    }
+    set{
+      position = CGPoint(x: newValue.x - bounds.size.width/2, y: newValue.y - bounds.size.height/2)
+    }
+  }
+}
+
 extension CATransform3D{
   public subscript(index: Int) -> float4{
     get {
@@ -70,6 +81,15 @@ extension CATransform3D{
 public protocol VectorConvertable{
   var toVec4:float4 { get }
   static func fromVec4(_ values: float4) -> Self
+}
+
+extension Float:VectorConvertable{
+  public var toVec4:float4 {
+    return [self, 0,0,0]
+  }
+  public static func fromVec4(_ values: float4) -> Float {
+    return values[0]
+  }
 }
 
 extension CGFloat:VectorConvertable{
